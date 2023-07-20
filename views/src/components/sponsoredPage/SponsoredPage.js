@@ -3,11 +3,11 @@ import './SponsoredPage.css';
 
 function SponsoredPage() {
   const sponsors = [
-    'Company A',
-    'Company B',
-    'Company C',
-    'Company D',
-    'Company E',
+    { name: 'Company A', logoUrl: '/images/companies-logo/company-a.png' },
+    { name: 'Company B', logoUrl: '/images/companies-logo/company-b.png' },
+    { name: 'Company C', logoUrl: '/images/companies-logo/company-c.png' },
+    { name: 'Company D', logoUrl: '/images/companies-logo/company-d.png' },
+    { name: 'Company E', logoUrl: '/images/companies-logo/company-e.png' },
   ];
 
   const sponsorshipPlans = [
@@ -53,8 +53,13 @@ function SponsoredPage() {
       <section>
         <h2>Sponsors</h2>
         <ul className="items no-list">
-          {sponsors.map((company, index) => (
-            <li key={index}>{company}</li>
+          {sponsors.map((sponsor, index) => (
+            <li key={index}>
+              <div className="companies-logo">
+                <img src={sponsor.logoUrl} alt={sponsor.name}/>
+                <h3>{sponsor.name}</h3>
+              </div>
+            </li>
           ))}
       </ul>
       </section>
