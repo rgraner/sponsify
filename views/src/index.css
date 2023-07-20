@@ -29,21 +29,24 @@ body {
   color: var(--dark-color);
 }
 
-h2 {
-  font-size: 28px;
-  font-weight: 100;
-  /* text-transform: uppercase; */
+ul {
+  list-style-position: inside;
 }
 
-ul {
+.no-list {
   list-style: none;
 }
 
 section {
-  margin-top: 30px;
+  margin-top: 50px;
 }
 
-.no-list {
+.section-title {
+  font-size: 28px;
+  font-weight: 100;
+}
+
+.items {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
