@@ -40,7 +40,9 @@ function SponsoredPage() {
   return (
     <div className="container">
       <section>
-        <h2>Why Sponsor us</h2>
+        <div className="section-title">
+          <h2>Why Sponsor us</h2>
+        </div>
         <p>
           Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
           Nullam scelerisque diam sit amet est iaculis, nec sagittis nunc porta. 
@@ -51,7 +53,9 @@ function SponsoredPage() {
       </section>
 
       <section>
-        <h2>Sponsors</h2>
+        <div className="section-title">
+          <h2>Sponsors</h2>
+        </div>
         <ul className="items no-list">
           {sponsors.map((sponsor, index) => (
             <li key={index}>
@@ -65,7 +69,9 @@ function SponsoredPage() {
       </section>
 
       <section>
-        <h2>Plans</h2>
+        <div className="section-title">
+          <h2>Plans</h2>
+        </div>
         <div className="card">
           {sponsorshipPlans.map((plan, index) => (
             <div className="plan-card" key={index}>
