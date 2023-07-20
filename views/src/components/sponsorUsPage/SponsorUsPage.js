@@ -1,7 +1,7 @@
 import React from 'react';
-import './SponsoredPage.css';
+import './SponsorUsPage.css';
 
-function SponsoredPage() {
+function SponsorUsPage() {
   const sponsors = [
     { name: 'Company A', logoUrl: '/images/companies-logo/company-a.png' },
     { name: 'Company B', logoUrl: '/images/companies-logo/company-b.png' },
@@ -96,4 +96,4 @@ function SponsoredPage() {
   );
 }
 
-export default SponsoredPage;
+export default SponsorUsPage;
