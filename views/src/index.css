@@ -24,14 +24,14 @@ code {
   padding: 0;
 }
 
+ul {
+  list-style-position: inside;
+}
+
 body {
   padding-top: 71px;
   font-family: 'Open Sans', sans-serif;
   color: var(--dark-color);
-}
-
-ul {
-  list-style-position: inside;
 }
 
 .no-list {

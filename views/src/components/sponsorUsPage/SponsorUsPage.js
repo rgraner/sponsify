@@ -65,7 +65,7 @@ function SponsorUsPage() {
               </div>
             </li>
           ))}
-      </ul>
+        </ul>
       </section>
 
       <section>
