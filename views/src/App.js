@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Navbar from './components/navbar/Navbar';
 import Footer from './components/footer/Footer';
-import OrgPage from './components/orgPage/OrgPage';
+import ProjectPage from './components/projectPage/ProjectPage';
 import SponsorPage from './components/sponsorPage/SponsorPage';
 
 
@@ -11,7 +11,7 @@ function App() {
     <Router>
       <Navbar />
       <Routes>
-        <Route exact path="org/:id" element={<OrgPage />} />
+        <Route exact path="project/:id" element={<ProjectPage />} />
         <Route path="sponsor/:id" element={<SponsorPage />} />
       </Routes>
       <Footer />

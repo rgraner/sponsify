@@ -1,7 +1,7 @@
 import React from 'react';
-import './OrgPage.css';
+import './ProjectPage.css';
 
-function OrgPage() {
+function ProjectPage() {
   const sponsors = [
     { name: 'Company A', logoUrl: '/images/companies-logo/company-a.png' },
     { name: 'Company B', logoUrl: '/images/companies-logo/company-b.png' },
@@ -96,4 +96,4 @@ function OrgPage() {
   );
 }
 
-export default OrgPage;
+export default ProjectPage;
