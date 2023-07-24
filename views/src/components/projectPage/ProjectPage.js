@@ -6,8 +6,6 @@ function ProjectPage() {
     { name: 'Company A', logoUrl: '/images/companies-logo/company-a.png' },
     { name: 'Company B', logoUrl: '/images/companies-logo/company-b.png' },
     { name: 'Company C', logoUrl: '/images/companies-logo/company-c.png' },
-    { name: 'Company D', logoUrl: '/images/companies-logo/company-d.png' },
-    { name: 'Company E', logoUrl: '/images/companies-logo/company-e.png' },
   ];
 
   const sponsorshipPlans = [
