@@ -1,5 +1,5 @@
 import React from 'react';
-import './ProjectPage.css';
+import './Projects.css';
 
 function ProjectPage() {
   const sponsors = [

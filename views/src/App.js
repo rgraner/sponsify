@@ -3,9 +3,9 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Navbar from './components/navbar/Navbar';
 import Footer from './components/footer/Footer';
 import Projects from './components/projects/Projects';
-import ProjectPage from './components/projectPage/ProjectPage';
+import ProjectPage from './components/projects/ProjectPage';
 import Sponsors from './components/sponsors/Sponsors';
-import SponsorPage from './components/sponsorPage/SponsorPage';
+import SponsorPage from './components/sponsors/SponsorPage';
 
 
 function App() {
