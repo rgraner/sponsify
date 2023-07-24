@@ -4,10 +4,19 @@ import Navbar from './components/navbar/Navbar';
 import Footer from './components/footer/Footer';
 import Projects from './components/projects/Projects';
 import ProjectPage from './components/projectPage/ProjectPage';
+import Sponsors from './components/sponsors/Sponsors';
 import SponsorPage from './components/sponsorPage/SponsorPage';
 
 
 function App() {
+  const sponsors = [
+    { id: 1, name: 'Company A', logoUrl: '/images/companies-logo/company-a.png' },
+    { id: 2, name: 'Company B', logoUrl: '/images/companies-logo/company-b.png' },
+    { id: 3, name: 'Company C', logoUrl: '/images/companies-logo/company-c.png' },
+    { id: 4, name: 'Company D', logoUrl: '/images/companies-logo/company-d.png' },
+    { id: 5, name: 'Company E', logoUrl: '/images/companies-logo/company-e.png' },
+  ];
+
   const projects = [
     { id: 1, name: 'Project X', logoUrl: '/images/companies-logo/project-x.png' },
     { id: 2, name: 'Project Y', logoUrl: '/images/companies-logo/project-x.png' },
@@ -20,7 +29,8 @@ function App() {
       <Routes>
         <Route exact path="/projects" element={<Projects projects={projects} />} />
         <Route path="projects/:projectId" element={<ProjectPage />} />
-        <Route path="sponsor/:id" element={<SponsorPage />} />
+        <Route exact path="/sponsors" element={<Sponsors sponsors={sponsors} />} />
+        <Route path="sponsors/:sponsorId" element={<SponsorPage />} />
       </Routes>
       <Footer />
     </Router>

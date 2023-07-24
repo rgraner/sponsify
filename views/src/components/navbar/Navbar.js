@@ -15,6 +15,7 @@ function Navbar() {
         </Link>
         <div className="navbar-items">
           <Link to="/projects">Projects</Link>
+          <Link to="/sponsors">Sponsors</Link>
           <Link to="/signin">Sign In</Link>
           <Link to="/signout">Sign Out</Link>
           <Link to="/register">Register</Link>
