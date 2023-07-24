@@ -49,7 +49,7 @@ function SponsorPage() {
     const sponsor = {
         id:1,
         name: 'Company A',
-        entities: ['Org Y', 'Org Z']
+        projects: ['Org Y', 'Org Z']
         // Add other sponsor data as needed.
       };
 
@@ -58,7 +58,7 @@ function SponsorPage() {
         <div className="container">
             <h1>Organizations we sponsor</h1>
             <ul>
-                {sponsor.entities.map((entity, index) => (
+                {sponsor.projects.map((entity, index) => (
                     <li key={index}>{entity}</li>
                 ))}
             </ul>
