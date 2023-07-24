@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux'; // Import connect from react-redux
 
 
 function Projects({ projects }) {
@@ -22,4 +23,8 @@ function Projects({ projects }) {
     );
 }
 
-export default Projects
+const mapStateToProps = (state) => ({
+    projects: state.projects, // Map the projects state to the "projects" prop
+  });
+
+export default connect(mapStateToProps)(Projects); // Connect Projects component to Redux

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux'; // Import connect from react-redux
 
 
 function Sponsors({ sponsors }) {
@@ -22,4 +23,8 @@ function Sponsors({ sponsors }) {
     );
 }
 
-export default Sponsors
+const mapStateToProps = (state) => ({
+    sponsors: state.sponsors, // Map the sponsors state to the "sponsor" prop
+  });
+
+export default connect(mapStateToProps)(Sponsors); // Connect Sponsors component to Redux
