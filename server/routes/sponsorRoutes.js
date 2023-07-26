@@ -1,7 +1,8 @@
 const express = require('express');
 const router = express.Router();
+const pool = require('../models/pool');
 
-// get all sponsors
+// Get all sponsors
 router.get('/', async (req, res) => {
     try {
         const { rows } = await pool.query('SELECT * FROM sponsors');
