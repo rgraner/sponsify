@@ -1,9 +1,13 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { connect } from 'react-redux'; // Import connect from react-redux
+import { connect } from 'react-redux';
+import { fetchSponsors } from '../../redux/reducers/sponsorsReducer'; // Import the fetchSponsors action
 
+function Sponsors({ sponsors, fetchSponsors }) {
+    useEffect(() => {
+        fetchSponsors(); // Dispatch the fetchSponsors action on component mount
+    }, [fetchSponsors]);
 
-function Sponsors({ sponsors }) {
     return (
         <div className="container">
             <h1>Sponsors</h1>
@@ -12,7 +16,7 @@ function Sponsors({ sponsors }) {
                     <li key={sponsor.id}>
                         <div className="companies-logo">
                             <Link to={`/sponsors/${sponsor.id}`}>
-                                <img src={sponsor.logoUrl} alt={sponsor.name}></img>
+                                <img src={sponsor.logo} alt={sponsor.name}></img>
                                 <h3>{sponsor.name}</h3>
                             </Link>
                         </div>
@@ -27,4 +31,8 @@ const mapStateToProps = (state) => ({
     sponsors: state.sponsors, // Map the sponsors state to the "sponsor" prop
   });
 
-export default connect(mapStateToProps)(Sponsors); // Connect Sponsors component to Redux
+const mapDispatchToProps = {
+    fetchSponsors, // Bind the fetchSponsors action to props
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Sponsors); // Connect Sponsors component to Redux
