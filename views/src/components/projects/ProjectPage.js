@@ -3,9 +3,9 @@ import './Projects.css';
 
 function ProjectPage() {
   const sponsors = [
-    { name: 'Company A', logoUrl: '/images/companies-logo/company-a.png' },
-    { name: 'Company B', logoUrl: '/images/companies-logo/company-b.png' },
-    { name: 'Company C', logoUrl: '/images/companies-logo/company-c.png' },
+    { name: 'Company A', logoUrl: '/images/companies-logo/sponsor_a.png' },
+    { name: 'Company B', logoUrl: '/images/companies-logo/sponsor_b.png' },
+    { name: 'Company C', logoUrl: '/images/companies-logo/sponsor_c.png' },
   ];
 
   const sponsorshipPlans = [
