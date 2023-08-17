@@ -1,6 +1,6 @@
 const initialState = [
-    { id: 1, name: 'Project X', logoUrl: '/images/companies-logo/company-x.png' },
-    { id: 2, name: 'Project Y', logoUrl: '/images/companies-logo/company-y.png' },
+    { id: 1, name: 'Project X', logoUrl: '/images/companies-logo/project_x.png' },
+    { id: 2, name: 'Project Y', logoUrl: '/images/companies-logo/project_y.png' },
     // Add more projects data as needed
   ];
 
