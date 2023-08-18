@@ -16,7 +16,7 @@ function Sponsors({ sponsors, fetchSponsors }) {
                     <li key={sponsor.id}>
                         <div className="companies-logo">
                             <Link to={`/sponsors/${sponsor.id}`}>
-                                <img src={sponsor.logo} alt={sponsor.name}></img>
+                                <img src={`/images/companies-logo/${sponsor.logo}`} alt={sponsor.name}></img>
                                 <h3>{sponsor.name}</h3>
                             </Link>
                         </div>
