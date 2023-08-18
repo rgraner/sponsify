@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 
 const sponsorRoutes = require('./routes/sponsors');
+const projectRoutes = require('./routes/projects');
 
 const app = express();
 
@@ -14,6 +15,7 @@ app.use(cors());
 
 // Routes
 app.use('/api/sponsors', sponsorRoutes);
+app.use('/api/projects', projectRoutes);
 
 // Start the server
 const port = process.env.PORT;

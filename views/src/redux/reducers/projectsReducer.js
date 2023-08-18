@@ -1,12 +1,39 @@
-const initialState = [
-    { id: 1, name: 'Project X', logoUrl: '/images/companies-logo/project_x.png' },
-    { id: 2, name: 'Project Y', logoUrl: '/images/companies-logo/project_y.png' },
-    // Add more projects data as needed
-  ];
+// Action Types:
+const FETCH_PROJECTS_SUCCESS = 'FETCH_PROJECTS_SUCCESS';
 
+// Action Creators
+const fetchProjectsSuccess = (projects) => ({
+  type: FETCH_PROJECTS_SUCCESS,
+  payload: projects,
+});
+
+// Async Action Creator
+export const fetchProjects = () => {
+  return async (dispatch) => {
+    try {
+      const response = await fetch('http://localhost:8000/api/projects');
+      const projects = await response.json();
+      dispatch(fetchProjectsSuccess(projects));
+    } catch (error) {
+      console.error('Error fetching projects:', error);
+      // Handle error actions if needed
+    }
+  };
+};
+
+// Initial State
+const initialState = [];
+
+// Reducer
 const projectsReducer = (state = initialState, action) => {
     // You can handle actions and update state here (e.g., add, delete, or modify projects)
-    return state;
+    switch (action.type) {
+      case FETCH_PROJECTS_SUCCESS:
+        return action.payload;
+      // Handle other actions if needed
+      default:
+        return state;
+    }
 };
 
 export default projectsReducer;
