@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import './Navbar.css';
-import logo from '../../images/sponsify.png';
+// import logo from '../../images/sponsify.png';
 
 
 
