@@ -1,34 +1,8 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux'; // Import connect from react-redux
 
-const plans = [
-    {
-      name: 'Gold Plan',
-      price: '99',
-      benefits: [
-        'Logo placement on website',
-        'Social media promotion',
-        'VIP event access',
-      ],
-    },
-    {
-      name: 'Silver Plan',
-      price: '49',
-      benefits: [
-        'Logo placement on website',
-        'Social media promotion',
-      ],
-    },
-    {
-      name: 'Bronze Plan',
-      price: '19',
-      benefits: [
-        'Logo placement on website',
-      ],
-    },
-];
 
-function Plans() {
+function Plans({ plans }) {
     return (
         <div className="card">
             {plans.map((plan, index) => (
@@ -52,9 +26,9 @@ function Plans() {
     )
 };
 
-// const mapStateToProps = (state) => ({
-//     plans: state.projects, // Map the plans state to the "plans" prop
-//   });
+const mapStateToProps = (state) => ({
+    plans: state.plans, // Map the plans state to the "plans" prop
+  });
 
-export default Plans; // Connect Plans component to Redux
+export default connect(mapStateToProps)(Plans); // Connect Plans component to Redux
 
