@@ -1,4 +1,5 @@
 import React from 'react';
+import Plans from '../plans/Plans'
 import './Projects.css';
 
 function ProjectPage() {
@@ -8,32 +9,32 @@ function ProjectPage() {
     { name: 'Company C', logoUrl: '/images/companies-logo/sponsor_c.png' },
   ];
 
-  const sponsorshipPlans = [
-    {
-      name: 'Gold Plan',
-      price: '99',
-      benefits: [
-        'Logo placement on website',
-        'Social media promotion',
-        'VIP event access',
-      ],
-    },
-    {
-      name: 'Silver Plan',
-      price: '49',
-      benefits: [
-        'Logo placement on website',
-        'Social media promotion',
-      ],
-    },
-    {
-      name: 'Bronze Plan',
-      price: '19',
-      benefits: [
-        'Logo placement on website',
-      ],
-    },
-  ];
+  // const sponsorshipPlans = [
+  //   {
+  //     name: 'Gold Plan',
+  //     price: '99',
+  //     benefits: [
+  //       'Logo placement on website',
+  //       'Social media promotion',
+  //       'VIP event access',
+  //     ],
+  //   },
+  //   {
+  //     name: 'Silver Plan',
+  //     price: '49',
+  //     benefits: [
+  //       'Logo placement on website',
+  //       'Social media promotion',
+  //     ],
+  //   },
+  //   {
+  //     name: 'Bronze Plan',
+  //     price: '19',
+  //     benefits: [
+  //       'Logo placement on website',
+  //     ],
+  //   },
+  // ];
 
   return (
     <div className="container">
@@ -70,7 +71,8 @@ function ProjectPage() {
         <div className="section-title">
           <h2>Plans</h2>
         </div>
-        <div className="card">
+        <Plans />
+        {/* <div className="card">
           {sponsorshipPlans.map((plan, index) => (
             <div className="plan-card" key={index}>
               <div className="plan-card-header">
@@ -87,7 +89,7 @@ function ProjectPage() {
               <div className="plan-card-footer">Buy Now</div>
             </div>
           ))}
-        </div>
+        </div> */}
         
       </section>
     </div>
