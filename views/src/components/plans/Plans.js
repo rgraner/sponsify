@@ -1,8 +1,15 @@
 import React, { useEffect } from 'react';
-import { connect } from 'react-redux'; // Import connect from react-redux
+import { connect } from 'react-redux';
+import { fetchPlansByProjectId } from '../../redux/reducers/plansReducer';
 
 
-function Plans({ plans }) {
+function Plans({ plans, fetchPlansByProjectId, projectId }) {
+    useEffect(() => {
+        if (projectId) {
+            fetchPlansByProjectId(projectId);
+        }
+    }, [fetchPlansByProjectId, projectId]);
+
     return (
         <div className="card">
             {plans.map((plan, index) => (
@@ -27,8 +34,12 @@ function Plans({ plans }) {
 };
 
 const mapStateToProps = (state) => ({
-    plans: state.plans, // Map the plans state to the "plans" prop
-  });
+    plans: state.plans, 
+});
 
-export default connect(mapStateToProps)(Plans); // Connect Plans component to Redux
+const mapDispatchToProps = {
+    fetchPlansByProjectId,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Plans); // Connect Plans component to Redux
 
