@@ -46,7 +46,7 @@ function ProjectPage() {
 
       <section>
         <div className="section-title">
-          <h2>Plans</h2>
+          <h2>Become our Sponsor</h2>
         </div>
         <Plans projectId={projectId}/>
       </section>

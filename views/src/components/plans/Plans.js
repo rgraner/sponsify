@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { fetchPlansByProjectId } from '../../redux/reducers/plansReducer';
+import './Plans.css'
 
 
 function Plans({ plans, fetchPlansByProjectId, projectId }) {
