@@ -3,7 +3,7 @@ const router = express.Router();
 const dbCart = require('../controllers/cart');
 
 
-router.get('/sponsor/:sponsorId', dbCart.getCartItems);
+router.get('/sponsor/:sponsorId', dbCart.getCartItem);
 router.post('/add', dbCart.addToCart);
 router.delete('/:cartId', dbCart.deleteCartItem);
 

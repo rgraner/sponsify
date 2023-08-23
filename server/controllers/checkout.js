@@ -6,21 +6,22 @@ const checkout = async (req, res) => {
 
     try {
         // Get the sponsor's cart items
-        const cartItems = await pool.query(
+        const cartItem = await pool.query(
             'SELECT * FROM cart WHERE sponsor_id = $1',
             [sponsorId]
         );
-        
-        // Create a new order for each cart item
-        for (const cartItem of cartItems.rows) {
-            const { plan_id } = cartItem;
-            
-            // Create a new order
-            const newOrder = await pool.query(
-                'INSERT INTO orders (sponsor_id, plan_id) VALUES ($1, $2) RETURNING *',
-                [sponsorId, plan_id]
-            );
+
+        // Check if a cart item exists
+        if (cartItem.rows.length === 0) {
+            return res.status(404).json({ message: 'No items in the cart' });
         }
+        
+        // Create a new order
+        const { plan_id } = cartItem.rows[0];
+        await pool.query(
+            'INSERT INTO orders (sponsor_id, plan_id) VALUES ($1, $2) RETURNING *',
+            [sponsorId, plan_id]
+        );
         
         
         // Clear the sponsors's cart
