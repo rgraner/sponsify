@@ -1,16 +1,18 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { fetchSponsorsByProject } from '../../redux/reducers/sponsorsByProjectReducer';
 
 import Plans from '../plans/Plans'
 import './Projects.css';
 
-function ProjectPage() {
-  const sponsors = [
-    { name: 'Company A', logoUrl: '/images/companies-logo/sponsor_a.png' },
-    { name: 'Company B', logoUrl: '/images/companies-logo/sponsor_b.png' },
-  ];
+function ProjectPage({ sponsorsByProject, fetchSponsorsByProject }) {
 
   const { projectId } = useParams();
+
+  useEffect(() => {
+    fetchSponsorsByProject(projectId); // Dispatch the fetchSponsor on component mount
+  }, [fetchSponsorsByProject, projectId]);
 
   return (
     <div className="container">
@@ -31,16 +33,18 @@ function ProjectPage() {
         <div className="section-title">
           <h2>Sponsors</h2>
         </div>
-        <ul className="items no-list">
-          {sponsors.map((sponsor, index) => (
-            <li key={index}>
-              <div className="companies-logo">
-                <img src={sponsor.logoUrl} alt={sponsor.name}/>
-                <h3>{sponsor.name}</h3>
-              </div>
-            </li>
+        {sponsorsByProject.length > 0 ? (
+        <div className="items companies-logo">
+          {sponsorsByProject.map((sponsor, index) => (
+            <div key={index}>
+              <img src={`/images/companies-logo/${sponsor.logo}`} alt={sponsor.name} />
+              <h3>{sponsor.name}</h3>
+            </div>
           ))}
-        </ul>
+        </div>
+        ) : (
+          <p>Become our first sponsor</p>
+        )}
       </section>
 
       <section>
@@ -53,4 +57,12 @@ function ProjectPage() {
   );
 }
 
-export default ProjectPage;
+const mapStateToProps = (state) => ({
+  sponsorsByProject: state.sponsorsByProject,
+});
+
+const mapDispatchToProps = {
+  fetchSponsorsByProject,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ProjectPage);
