@@ -8,6 +8,8 @@ const sponsorsRoute = require('./routes/sponsors');
 const projectsRoute = require('./routes/projects');
 const plansRoute = require('./routes/plans');
 const cartRoute = require('./routes/cart');
+const checkoutRoute = require('./routes/checkout');
+
 
 const app = express();
 
@@ -20,6 +22,7 @@ app.use('/api/sponsors', sponsorsRoute);
 app.use('/api/projects', projectsRoute);
 app.use('/api/plans', plansRoute);
 app.use('/api/cart', cartRoute);
+app.use('/api/checkout', checkoutRoute);
 
 // Start the server
 const port = process.env.PORT;
