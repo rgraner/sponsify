@@ -37,7 +37,7 @@ const getPlansByProjectId = (req, res) => {
     );
 };
 
-module.exports = getPlansByProjectId;
+module.exports = { getPlansByProjectId };
 
 
 

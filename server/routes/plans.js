@@ -1,9 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const getPlansByProjectId = require('../controllers/plans');
+const dbPlans = require('../controllers/plans');
 
 
-router.get('/project/:projectId', getPlansByProjectId);
+router.get('/project/:projectId', dbPlans.getPlansByProjectId);
 
 
 module.exports = router;

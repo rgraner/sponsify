@@ -7,6 +7,7 @@ const cors = require('cors');
 const sponsorsRoute = require('./routes/sponsors');
 const projectsRoute = require('./routes/projects');
 const plansRoute = require('./routes/plans');
+const cartRoute = require('./routes/cart');
 
 const app = express();
 
@@ -18,6 +19,7 @@ app.use(cors());
 app.use('/api/sponsors', sponsorsRoute);
 app.use('/api/projects', projectsRoute);
 app.use('/api/plans', plansRoute);
+app.use('/api/cart', cartRoute);
 
 // Start the server
 const port = process.env.PORT;
