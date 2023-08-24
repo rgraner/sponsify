@@ -33,6 +33,55 @@ const getProjectById = async ( req, res) => {
 
 };
 
+// Get projects by sponsor id
+const getProjectsBysponsorId = async (req, res) => {
+    const sponsorId = req.params.sponsorId;
+  
+    try {
+      // Query the database to get the projects associated with the sponsor
+      const projectsData = await pool.query(
+        'SELECT DISTINCT\
+        sponsors.name AS sponsor,\
+        projects.name AS project,\
+        sponsors.logo AS sponsor_logo,\
+        projects.logo AS project_logo\
+        FROM sponsors\
+        INNER JOIN sponsor_projects ON sponsors.id = sponsor_projects.sponsor_id\
+        INNER JOIN projects ON sponsor_projects.project_id = projects.id\
+        WHERE sponsors.id = $1;',
+        [sponsorId]
+      );
+  
+      if (projectsData.rows.length === 0) {
+        return res.status(404).json({ message: 'No projects found for this sponsor' });
+      }
+
+      // Process the data to group projects by sponsor
+      const result = {};
+
+      projectsData.rows.forEach((row) => {
+        const sponsor = row.sponsor;
+        if (!result[sponsor]) {
+            result[sponsor] = {
+                sponsor: sponsor,
+                sponsor_logo: row.sponsor_logo,
+                projects: [],
+            };
+        }
+        result[sponsor].projects.push({
+            project_name: row.project,
+            project_logo: row.project_logo,
+        });
+      });
+  
+      // Return the sponsor's name and project's name
+      res.status(200).json(Object.values(result));
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Internal server error' });
+    }
+};
+
 // Create project
 const createProject = (req, res) => {
     const { name, description, username, email, logo } = req.body;
@@ -90,6 +139,7 @@ const deleteProject = (req, res) => {
 module.exports = {
     getAllProjects,
     getProjectById,
+    getProjectsBysponsorId,
     createProject,
     updateProject,
     deleteProject,
