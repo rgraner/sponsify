@@ -17,7 +17,7 @@ function Projects({ projects, fetchProjects }) {
                     <li key={project.id}>
                         <div className="companies-logo">
                             <Link to={`/projects/${project.id}`}>
-                                <img src={`images/companies-logo/${project.logo}`} alt={project.name}></img>
+                                <img src={`/images/companies-logo/${project.logo}`} alt={project.name}></img>
                                 <h3>{project.name}</h3>
                             </Link>
                         </div>
