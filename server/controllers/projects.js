@@ -11,6 +11,28 @@ const getAllProjects = (req, res) => {
     });
 };
 
+// Get project by ID
+const getProjectById = async ( req, res) => {
+    const projectId = parseInt(req.params.projectId);
+
+    try {
+        const project = await pool.query(
+            'SELECT * FROM projects WHERE id = $1',
+            [projectId]
+        );
+
+        if(project.rows.length === 0) {
+            return res.status(404).json({ message: 'Project not found' });
+        }
+
+        res.status(200).json(project.rows[0]);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+
+};
+
 // Create project
 const createProject = (req, res) => {
     const { name, description, username, email, logo } = req.body;
@@ -67,6 +89,7 @@ const deleteProject = (req, res) => {
 
 module.exports = {
     getAllProjects,
+    getProjectById,
     createProject,
     updateProject,
     deleteProject,

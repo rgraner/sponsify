@@ -2,30 +2,29 @@ import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { fetchSponsorsByProject } from '../../redux/reducers/sponsorsByProjectReducer';
+import { fetchProject } from '../../redux/reducers/projectReducer';
 
 import Plans from '../plans/Plans'
 import './Projects.css';
 
-function ProjectPage({ sponsorsByProject, fetchSponsorsByProject }) {
+function ProjectPage({ project, fetchProject, sponsorsByProject, fetchSponsorsByProject }) {
 
   const { projectId } = useParams();
 
   useEffect(() => {
-    fetchSponsorsByProject(projectId); // Dispatch the fetchSponsor on component mount
+    fetchSponsorsByProject(projectId);
+    fetchProject(projectId);
   }, [fetchSponsorsByProject, projectId]);
 
   return (
     <div className="container">
+      <h1>{project.name}</h1>
       <section>
         <div className="section-title">
           <h2>Why Sponsor us</h2>
         </div>
         <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-          Nullam scelerisque diam sit amet est iaculis, nec sagittis nunc porta. 
-          Phasellus accumsan feugiat felis, nec efficitur ex convallis et. 
-          Quisque nec volutpat ex, sed rhoncus metus. 
-          Suspendisse nec laoreet velit. Integer sed suscipit libero.
+          {project.description}
         </p>
       </section>
 
@@ -59,10 +58,12 @@ function ProjectPage({ sponsorsByProject, fetchSponsorsByProject }) {
 
 const mapStateToProps = (state) => ({
   sponsorsByProject: state.sponsorsByProject,
+  project: state.project
 });
 
 const mapDispatchToProps = {
   fetchSponsorsByProject,
+  fetchProject
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProjectPage);

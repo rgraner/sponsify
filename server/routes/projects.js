@@ -4,6 +4,7 @@ const dbProjects = require('../controllers/projects');
 
 
 router.get('/', dbProjects.getAllProjects);
+router.get('/:projectId', dbProjects.getProjectById);
 router.post('/', dbProjects.createProject);
 router.put('/:id', dbProjects.updateProject);
 router.delete('/:id', dbProjects.deleteProject);
