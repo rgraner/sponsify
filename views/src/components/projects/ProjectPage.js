@@ -18,7 +18,11 @@ function ProjectPage({ project, fetchProject, sponsorsByProject, fetchSponsorsBy
 
   return (
     <div className="container">
-      <h1>{project.name}</h1>
+      <div className="page-title companies-logo">
+        <img src={`/images/companies-logo/${project.logo}`} alt={project.name} />
+        <h1>{project.name}</h1>
+      </div>
+      
       <section>
         <div className="section-title">
           <h2>Why Sponsor us</h2>

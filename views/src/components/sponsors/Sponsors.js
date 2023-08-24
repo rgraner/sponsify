@@ -10,7 +10,7 @@ function Sponsors({ sponsors, fetchSponsors }) {
 
     return (
         <div className="container">
-            <h1>Sponsors</h1>
+            <h1 className="page-title">Sponsors</h1>
             <ul className="items no-list">
                 {sponsors.map((sponsor) => (
                     <li key={sponsor.id}>

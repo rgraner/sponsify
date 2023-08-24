@@ -29,7 +29,7 @@ ul {
 }
 
 body {
-  padding-top: 71px;
+  padding-top: 120px;
   font-family: 'Open Sans', sans-serif;
   color: var(--dark-color);
 }
@@ -38,8 +38,13 @@ body {
   list-style: none;
 }
 
+.page-title {
+  margin-bottom: 50px;
+  text-align: center;
+}
+
 section {
-  margin-top: 75px;
+  margin-bottom: 75px;
 }
 
 .section-title {

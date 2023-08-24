@@ -11,7 +11,7 @@ function Projects({ projects, fetchProjects }) {
 
     return (
         <div className="container">
-            <h1>Projects</h1>
+            <h1 className="page-title">Projects</h1>
             <ul className="items no-list">
                 {projects.map((project) => (
                     <li key={project.id}>
