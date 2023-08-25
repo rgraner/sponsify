@@ -41,7 +41,9 @@ const getProjectsBysponsorId = async (req, res) => {
       // Query the database to get the projects associated with the sponsor
       const projectsData = await pool.query(
         'SELECT DISTINCT\
+        sponsors.id AS sponsor_id,\
         sponsors.name AS sponsor,\
+        projects.id AS project_id,\
         projects.name AS project,\
         sponsors.logo AS sponsor_logo,\
         projects.logo AS project_logo\
@@ -63,12 +65,14 @@ const getProjectsBysponsorId = async (req, res) => {
         const sponsor = row.sponsor;
         if (!result[sponsor]) {
             result[sponsor] = {
+                sponsor_id: row.sponsor_id,
                 sponsor: sponsor,
                 sponsor_logo: row.sponsor_logo,
                 projects: [],
             };
         }
         result[sponsor].projects.push({
+            project_id: row.project_id,
             project_name: row.project,
             project_logo: row.project_logo,
         });

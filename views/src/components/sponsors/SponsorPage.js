@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { fetchProjectsBySponsor } from '../../redux/reducers/projectsBySponsorReducer';
 
@@ -27,10 +27,10 @@ function SponsorPage({ projectsBySponsor, fetchProjectsBySponsor }) {
                 {projectsBySponsor[0].projects.map((project) => (
                     <li key={project.sponsor}>
                         <div className="companies-logo">
-                            {/* <Link to={`/projects/${project.id}`}> */}
+                            <Link to={`/projects/${project.project_id}`}>
                                 <img src={`/images/companies-logo/${project.project_logo}`} alt={project.project_name}></img>
                                 <h3>{project.project_name}</h3>
-                            {/* </Link> */}
+                            </Link>
                         </div>
                     </li>
                 ))}

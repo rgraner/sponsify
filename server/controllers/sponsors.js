@@ -18,7 +18,7 @@ const getSponsorsByProjectId = async (req, res) => {
     try {
       // Query the database to get the sponsor associated with the project
       const sponsor = await pool.query(
-        'SELECT DISTINCT sponsor.name, sponsor.logo FROM sponsors AS sponsor \
+        'SELECT DISTINCT sponsor.id, sponsor.name, sponsor.logo FROM sponsors AS sponsor \
         INNER JOIN sponsor_projects AS sp ON sponsor.id = sp.sponsor_id \
         WHERE sp.project_id = $1',
         [projectId]
