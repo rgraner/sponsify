@@ -17,19 +17,47 @@ const getSponsorsByProjectId = async (req, res) => {
   
     try {
       // Query the database to get the sponsor associated with the project
-      const sponsor = await pool.query(
-        'SELECT DISTINCT sponsor.id, sponsor.name, sponsor.logo FROM sponsors AS sponsor \
-        INNER JOIN sponsor_projects AS sp ON sponsor.id = sp.sponsor_id \
-        WHERE sp.project_id = $1',
+      const sponsorsData = await pool.query(
+        'SELECT DISTINCT\
+        projects.id AS project_id,\
+        projects.name AS project_name,\
+        projects.logo AS project_logo,\
+        sponsors.id AS sponsor_id,\
+        sponsors.name AS sponsor_name,\
+        sponsors.logo AS sponsor_logo\
+        FROM projects\
+        INNER JOIN sponsor_projects ON projects.id = sponsor_projects.project_id\
+        INNER JOIN sponsors ON sponsors.id = sponsor_projects.sponsor_id\
+        WHERE projects.id = $1;',
         [projectId]
       );
   
-      if (sponsor.rows.length === 0) {
-        return res.status(404).json({ message: 'No sponsor found for this project' });
+      if (sponsorsData.rows.length === 0) {
+        return res.status(404).json({ message: 'No sponsors found for this project' });
       }
+
+      // Process the data to group sponsors by project
+      const result = {};
+
+      sponsorsData.rows.forEach((row) => {
+        const project_name = row.project_name;
+        if (!result[project_name]) {
+          result[project_name] = {
+            project_id: row.project_id,
+            project_name: project_name,
+            project_logo: row.project_logo,
+            sponsors: [],
+          };
+        }
+        result[project_name].sponsors.push({
+          sponsor_id: row.sponsor_id,
+          sponsor_name: row.sponsor_name,
+          sponsor_logo: row.sponsor_logo,
+        });
+      });
   
       // Return the sponsor's name and logo
-      res.status(200).json(sponsor.rows);
+      res.status(200).json(Object.values(result));
     } catch (error) {
       console.error(error);
       res.status(500).json({ message: 'Internal server error' });

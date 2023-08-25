@@ -37,14 +37,16 @@ function ProjectPage({ project, fetchProject, sponsorsByProject, fetchSponsorsBy
           <h2>Sponsors</h2>
         </div>
         {sponsorsByProject.length > 0 ? (
-        <div className="items">
-          {sponsorsByProject.map((sponsor, index) => (
-            <div className="companies-logo" key={index}>
-               <Link to={`/sponsors/${sponsor.id}`}>
-                <img src={`/images/companies-logo/${sponsor.logo}`} alt={sponsor.name} />
-                <h3>{sponsor.name}</h3>
-              </Link>
-            </div>
+        <div className="items no-list">
+          {sponsorsByProject[0].sponsors.map((sponsor) => (
+            <li key={sponsor.project_name}>
+              <div className="companies-logo">
+                  <Link to={`/sponsors/${sponsor.sponsor_id}`}>
+                      <img src={`/images/companies-logo/${sponsor.sponsor_logo}`} alt={sponsor.sponsor_name}></img>
+                      <h3>{sponsor.sponsor_name}</h3>
+                  </Link>
+              </div>
+            </li>
           ))}
         </div>
         ) : (
