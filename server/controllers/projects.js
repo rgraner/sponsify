@@ -42,10 +42,11 @@ const getProjectsBysponsorId = async (req, res) => {
       const projectsData = await pool.query(
         'SELECT DISTINCT\
         sponsors.id AS sponsor_id,\
-        sponsors.name AS sponsor,\
+        sponsors.name AS sponsor_name,\
+        sponsors.description AS sponsor_description,\
+        sponsors.logo AS sponsor_logo,\
         projects.id AS project_id,\
         projects.name AS project,\
-        sponsors.logo AS sponsor_logo,\
         projects.logo AS project_logo\
         FROM sponsors\
         INNER JOIN sponsor_projects ON sponsors.id = sponsor_projects.sponsor_id\
@@ -62,16 +63,17 @@ const getProjectsBysponsorId = async (req, res) => {
       const result = {};
 
       projectsData.rows.forEach((row) => {
-        const sponsor = row.sponsor;
-        if (!result[sponsor]) {
-            result[sponsor] = {
+        const sponsor_name = row.sponsor_name;
+        if (!result[sponsor_name]) {
+            result[sponsor_name] = {
                 sponsor_id: row.sponsor_id,
-                sponsor: sponsor,
+                sponsor: sponsor_name,
+                sponsor_description: row.sponsor_description,
                 sponsor_logo: row.sponsor_logo,
                 projects: [],
             };
         }
-        result[sponsor].projects.push({
+        result[sponsor_name].projects.push({
             project_id: row.project_id,
             project_name: row.project,
             project_logo: row.project_logo,

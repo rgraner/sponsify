@@ -2,25 +2,28 @@ import React, { useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { fetchSponsorsByProject } from '../../redux/reducers/sponsorsByProjectReducer';
-import { fetchProject } from '../../redux/reducers/projectReducer';
 
 import Plans from '../plans/Plans'
 import './Projects.css';
 
-function ProjectPage({ project, fetchProject, sponsorsByProject, fetchSponsorsByProject }) {
+function ProjectPage({ sponsorsByProject, fetchSponsorsByProject }) {
 
   const { projectId } = useParams();
 
   useEffect(() => {
     fetchSponsorsByProject(projectId);
-    fetchProject(projectId);
   }, [fetchSponsorsByProject, projectId]);
+
+  // Check if projectsBySponsor is empty before accessing its properties
+  if (sponsorsByProject.length === 0 || sponsorsByProject.length === undefined ) {
+    return <div className="container">Loading...</div>; // You can display a loading indicator here
+}
 
   return (
     <div className="container">
       <div className="page-title companies-logo">
-        <img src={`/images/companies-logo/${project.logo}`} alt={project.name} />
-        <h1>{project.name}</h1>
+        <img src={`/images/companies-logo/${sponsorsByProject[0].project_logo}`} alt={sponsorsByProject[0].project_name} />
+        <h1>{sponsorsByProject[0].project_name}</h1>
       </div>
       
       <section>
@@ -28,7 +31,7 @@ function ProjectPage({ project, fetchProject, sponsorsByProject, fetchSponsorsBy
           <h2>Why Sponsor us</h2>
         </div>
         <p>
-          {project.description}
+          {sponsorsByProject[0].project_description}
         </p>
       </section>
 
@@ -66,12 +69,10 @@ function ProjectPage({ project, fetchProject, sponsorsByProject, fetchSponsorsBy
 
 const mapStateToProps = (state) => ({
   sponsorsByProject: state.sponsorsByProject,
-  project: state.project
 });
 
 const mapDispatchToProps = {
   fetchSponsorsByProject,
-  fetchProject
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProjectPage);
