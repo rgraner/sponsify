@@ -43,8 +43,6 @@ const getProjectsBysponsorId = async (req, res) => {
         'SELECT DISTINCT\
         sponsors.id AS sponsor_id,\
         sponsors.name AS sponsor_name,\
-        sponsors.description AS sponsor_description,\
-        sponsors.logo AS sponsor_logo,\
         projects.id AS project_id,\
         projects.name AS project,\
         projects.logo AS project_logo\
@@ -68,8 +66,6 @@ const getProjectsBysponsorId = async (req, res) => {
             result[sponsor_name] = {
                 sponsor_id: row.sponsor_id,
                 sponsor: sponsor_name,
-                sponsor_description: row.sponsor_description,
-                sponsor_logo: row.sponsor_logo,
                 projects: [],
             };
         }
