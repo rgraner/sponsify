@@ -1,16 +1,18 @@
 import React, { useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { fetchSponsor } from '../../redux/reducers/sponsorReducer';
 import { fetchProjectsBySponsor } from '../../redux/reducers/projectsBySponsorReducer';
 
 
-function SponsorPage({ projectsBySponsor, fetchProjectsBySponsor }) {
+function SponsorPage({ sponsor, fetchSponsor, projectsBySponsor, fetchProjectsBySponsor }) {
 
     const { sponsorId } = useParams();
 
     useEffect(() => {
         fetchProjectsBySponsor(sponsorId);
-    }, [fetchProjectsBySponsor, sponsorId])
+        fetchSponsor(sponsorId);
+    }, [fetchSponsor, fetchProjectsBySponsor, sponsorId])
 
     // Check if projectsBySponsor is empty before accessing its properties
     if (projectsBySponsor.length === 0 || projectsBySponsor.length === undefined ) {
@@ -19,7 +21,10 @@ function SponsorPage({ projectsBySponsor, fetchProjectsBySponsor }) {
     
     return (
         <div className="container">
-            <h1 className="page-title">{projectsBySponsor[0].sponsor}</h1>
+            <div className="page-title companies-logo">
+                <img src={`/images/companies-logo/${sponsor.logo}`} alt={sponsor.name} />
+                <h1>{sponsor.name}</h1>
+            </div>
             <div className="section-title">
                 <h2>Projects we sponsor</h2>
             </div>
@@ -45,11 +50,13 @@ function SponsorPage({ projectsBySponsor, fetchProjectsBySponsor }) {
 }
 
 const mapStateToProps = (state) => ({
-    projectsBySponsor: state.projectsBySponsor,
+    sponsor: state.sponsor,
+    projectsBySponsor: state.projectsBySponsor
   });
   
   const mapDispatchToProps = {
-    fetchProjectsBySponsor,
+    fetchSponsor,
+    fetchProjectsBySponsor
   };
   
   export default connect(mapStateToProps, mapDispatchToProps)(SponsorPage);

@@ -3,6 +3,7 @@ import projectsReducer from './projectsReducer';
 import projectReducer from './projectReducer'; 
 import projectsBySponsorReducer from './projectsBySponsorReducer';
 import sponsorsReducer from './sponsorsReducer';
+import sponsorReducer from './sponsorReducer';
 import sponsorsByProjectReducer from './sponsorsByProjectReducer';
 import plansReducer from './plansReducer';
 
@@ -11,6 +12,7 @@ const rootReducer = combineReducers({
   project: projectReducer,
   projectsBySponsor: projectsBySponsorReducer,
   sponsors: sponsorsReducer,
+  sponsor: sponsorReducer,
   sponsorsByProject: sponsorsByProjectReducer,
   plans: plansReducer,
 });

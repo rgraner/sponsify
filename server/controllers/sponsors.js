@@ -11,6 +11,28 @@ const getAllSponsors = (req, res) => {
     });
 };
 
+// Get sponsor by id
+const getSponsorById = async ( req, res) => {
+  const sponsorId = parseInt(req.params.sponsorId);
+
+  try {
+      const sponsor = await pool.query(
+          'SELECT * FROM sponsors WHERE id = $1',
+          [sponsorId]
+      );
+
+      if(sponsor.rows.length === 0) {
+          return res.status(404).json({ message: 'Sponsor not found' });
+      }
+
+      res.status(200).json(sponsor.rows[0]);
+  } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Internal server error' });
+  }
+
+};
+
 // Get sponsor by project id
 const getSponsorsByProjectId = async (req, res) => {
     const projectId = req.params.projectId;
@@ -123,6 +145,7 @@ const deleteSponsor = (req, res) => {
 
 module.exports = {
     getAllSponsors,
+    getSponsorById,
     getSponsorsByProjectId,
     createSponsor,
     updateSponsor,
