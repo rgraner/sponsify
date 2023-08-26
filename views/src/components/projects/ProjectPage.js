@@ -1,29 +1,26 @@
 import React, { useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { fetchProject } from '../../redux/reducers/projectReducer';
 import { fetchSponsorsByProject } from '../../redux/reducers/sponsorsByProjectReducer';
 
 import Plans from '../plans/Plans'
 import './Projects.css';
 
-function ProjectPage({ sponsorsByProject, fetchSponsorsByProject }) {
+function ProjectPage({ project, fetchProject, sponsorsByProject, fetchSponsorsByProject }) {
 
   const { projectId } = useParams();
 
   useEffect(() => {
     fetchSponsorsByProject(projectId);
-  }, [fetchSponsorsByProject, projectId]);
-
-  // Check if projectsBySponsor is empty before accessing its properties
-  if (sponsorsByProject.length === 0 || sponsorsByProject.length === undefined ) {
-    return <div className="container">Loading...</div>; // You can display a loading indicator here
-}
+    fetchProject(projectId);
+  }, [fetchSponsorsByProject, fetchProject, projectId]);
 
   return (
     <div className="container">
       <div className="page-title companies-logo">
-        <img src={`/images/companies-logo/${sponsorsByProject[0].project_logo}`} alt={sponsorsByProject[0].project_name} />
-        <h1>{sponsorsByProject[0].project_name}</h1>
+        <img src={`/images/companies-logo/${project.logo}`} alt={project.name} />
+        <h1>{project.name}</h1>
       </div>
       
       <section>
@@ -31,7 +28,7 @@ function ProjectPage({ sponsorsByProject, fetchSponsorsByProject }) {
           <h2>Why Sponsor us</h2>
         </div>
         <p>
-          {sponsorsByProject[0].project_description}
+          {project.description}
         </p>
       </section>
 
@@ -68,11 +65,13 @@ function ProjectPage({ sponsorsByProject, fetchSponsorsByProject }) {
 }
 
 const mapStateToProps = (state) => ({
-  sponsorsByProject: state.sponsorsByProject,
+  project: state.project,
+  sponsorsByProject: state.sponsorsByProject
 });
 
 const mapDispatchToProps = {
-  fetchSponsorsByProject,
+  fetchProject,
+  fetchSponsorsByProject
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProjectPage);
