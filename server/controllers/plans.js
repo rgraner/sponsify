@@ -99,7 +99,7 @@ const updatePlan = async (req, res) => {
 
     // Update the plan's name and price in the database
     await pool.query(
-      'UPDATE plans SET name = $1, price = $2 WHERE id = $3',
+      'UPDATE plans SET name = $1, price = $2, updated_at = NOW() WHERE id = $3',
       [name, price, planId]
     );
 
@@ -108,18 +108,17 @@ const updatePlan = async (req, res) => {
       if (benefit.benefit_id) {
         // If the benefit has an ID, it exists, so update it
         await pool.query(
-          'UPDATE plan_benefits SET benefit = $1 WHERE id = $2',
+          'UPDATE plan_benefits SET benefit = $1, updated_at = NOW() WHERE id = $2',
           [benefit.description, benefit.benefit_id]
         );
       } else {
         // If the benefit has no ID, it's a new benefit, so insert it
         await pool.query(
-          'INSERT INTO plan_benefits (id, benefit) VALUES ($1, $2)',
+          'INSERT INTO plan_benefits (plan_id, benefit, updated_at) VALUES ($1, $2, NOW())',
           [planId, benefit.description]
         );
       }
-      // Note: To remove benefits, you can implement an additional logic
-      // that marks benefits as "deleted" or delete them physically here
+
     }
 
     // Commit the transaction
@@ -135,11 +134,52 @@ const updatePlan = async (req, res) => {
   }
 };
 
+const deletePlan = async (req, res) => {
+    const planId = req.params.planId;
+
+    try {
+        // Perform the delete operation using the planId
+        const result = await pool.query(
+            'DELETE FROM plans WHERE id = $1', 
+            [planId]
+        );
+
+        if(result.rowCount === 0) {
+            return res.status(404).json({ message: 'Plan not found' });
+        }
+        res.status(200).json({ message: 'Plan deleted successfully' })
+    } catch (error) {
+        console.error('Error deleting plan:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+
+};
+
+const deletePlanBenefitById = async (req, res) => {
+    const benefitId = req.params.benefitId;
+
+    try {
+        // Delete benefit by id
+        await pool.query(
+            'DELETE FROM plan_benefits WHERE id = $1', 
+            [benefitId]
+        );
+
+        res.status(200).json({ message: 'Benefit deleted successfully' })
+    } catch (error) {
+        console.error('Error deleting benefit:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+
+};
+
 
 module.exports = { 
     getPlansByProjectId,
     createPlan,
-    updatePlan
+    updatePlan,
+    deletePlan,
+    deletePlanBenefitById
 };
 
 
