@@ -37,7 +37,47 @@ const getPlansByProjectId = (req, res) => {
     );
 };
 
-module.exports = { getPlansByProjectId };
+const createPlan = (req, res) => {
+    const { project_id, name, price, benefits } = req.body;
+
+    // Perform data validation here if needed
+
+    // Insert the new plan into the database
+    pool.query(
+        'INSERT INTO plans (project_id, name, price) VALUES ($1, $2, $3) RETURNING id',
+        [project_id, name, price],
+        (error, result) => {
+        if (error) {
+            console.error('Error creating plan:', error);
+            res.status(500).json({ message: 'Internal server error' });
+        } else {
+            const planId = result.rows[0].id;
+
+            // Insert plan benefits if provided
+            if (benefits && benefits.length > 0) {
+            benefits.forEach((benefit) => {
+                pool.query(
+                    'INSERT INTO plan_benefits (plan_id, benefit) VALUES ($1, $2)',
+                    [planId, benefit],
+                    (benefitsError) => {
+                        if (benefitsError) {
+                            console.error('Error inserting plan benefits:', benefitsError);
+                            res.status(500).json({ message: 'Internal server error' });
+                        }
+                    }
+                );
+            });
+        }
+        res.status(201).json({ message: 'Plan created successfully' });
+        }
+        }
+    );
+};
+
+module.exports = { 
+    getPlansByProjectId,
+    createPlan
+};
 
 
 
