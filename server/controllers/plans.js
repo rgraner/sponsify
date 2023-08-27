@@ -1,41 +1,54 @@
 const pool = require('../models/pool')
 
+
 // Get plans for a specific project_id
-const getPlansByProjectId = (req, res) => {
+const getPlansByProjectId = async (req, res) => {
     const projectId = req.params.projectId; // Extract the project ID from the request parameters
 
-    pool.query(
-        'SELECT plans.*, plan_benefits.benefit FROM plans \
-        LEFT JOIN plan_benefits ON plans.id = plan_benefits.plan_id \
-        WHERE plans.project_id = $1', 
-        [projectId], 
-        (error, results) => {
-            if (error) {
-                throw error;
-            }
-            // Group the results by plan ID and collect benefits in an array
-            const plansWithBenefits = results.rows.reduce((acc, row) => {
-                const existingPlan = acc.find(plan => plan.id === row.id);
+    try {
+        const plansData = await pool.query(
+            'SELECT\
+            plans.*,\
+            plan_benefits.benefit,\
+            plan_benefits.id AS benefit_id\
+            FROM plans \
+            LEFT JOIN plan_benefits ON plans.id = plan_benefits.plan_id\
+            WHERE plans.project_id = $1',
+            [projectId],
+        );
 
-                if (existingPlan) {
-                    existingPlan.benefits.push(row.benefit);
-                } else {
-                    acc.push({
-                        id: row.id,
-                        project_id: row.project_id,
-                        name: row.name,
-                        price: row.price,
-                        benefits: row.benefit ? [row.benefit] : [],
-                        created_at: row.created_at,
-                        updated_at: row.updated_at, 
-                    });
-                }
-                return acc;
-            }, []);
-            res.status(200).json(plansWithBenefits);
+        if (plansData.rows.length === 0) {
+            return res.status(404).json({ message: 'No plans found for this project' });
         }
-    );
+
+        // Group the results by plan ID and collect benefits in an array
+        const result = [];
+
+        plansData.rows.forEach((row) => {
+            const existingPlan = result.find((plan) => plan.name === row.name);
+            if (!existingPlan) {
+                result.push({
+                    plan_id: row.id,
+                    project_id: row.project_id,
+                    price: row.price,
+                    name: row.name,
+                    benefits: [],
+                    created_at: row.created_at,
+                    updated_at: row.updated_at
+                });
+            }
+            result[result.length - 1].benefits.push({
+                benefit_id: row.benefit_id,
+                description: row.benefit
+            });
+        });
+      res.status(200).json(result);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Internal server error' });
+      }
 };
+
 
 const createPlan = (req, res) => {
     const { project_id, name, price, benefits } = req.body;
@@ -73,6 +86,7 @@ const createPlan = (req, res) => {
         }
     );
 };
+
 
 module.exports = { 
     getPlansByProjectId,

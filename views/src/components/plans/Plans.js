@@ -13,16 +13,16 @@ function Plans({ plans, fetchPlansByProjectId, projectId }) {
 
     return (
         <div className="card">
-            {plans.map((plan, index) => (
-                <div className="plan-card" key={index}>
+            {plans.map((plan) => (
+                <div className="plan-card">
                 <div className="plan-card-header">
                     <h3>{plan.name}</h3>
                     <p>{plan.price === 0 ? 'Free' : `€${plan.price}`}</p>
                 </div>
                 <div className="plan-card-body">
                     <ul>
-                    {plan.benefits.map((benefit, index) => (
-                        <li key={index}>{benefit}</li>
+                    {plan.benefits.map((benefit) => (
+                        <li key={benefit.benefit_id}>{benefit.description}</li>
                     ))}
                     </ul>
                 </div>
