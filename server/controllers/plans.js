@@ -87,10 +87,59 @@ const createPlan = (req, res) => {
     );
 };
 
+const updatePlan = async (req, res) => {
+    const planId = req.params.planId;
+    const { name, price, benefits } = req.body;
+
+  // Validation logic here (check for required fields, data format, etc.)
+
+  try {
+    // Start a database transaction
+    await pool.query('BEGIN');
+
+    // Update the plan's name and price in the database
+    await pool.query(
+      'UPDATE plans SET name = $1, price = $2 WHERE id = $3',
+      [name, price, planId]
+    );
+
+    // Process benefits updates (edit, add, remove)
+    for (const benefit of benefits) {
+      if (benefit.benefit_id) {
+        // If the benefit has an ID, it exists, so update it
+        await pool.query(
+          'UPDATE plan_benefits SET benefit = $1 WHERE id = $2',
+          [benefit.description, benefit.benefit_id]
+        );
+      } else {
+        // If the benefit has no ID, it's a new benefit, so insert it
+        await pool.query(
+          'INSERT INTO plan_benefits (id, benefit) VALUES ($1, $2)',
+          [planId, benefit.description]
+        );
+      }
+      // Note: To remove benefits, you can implement an additional logic
+      // that marks benefits as "deleted" or delete them physically here
+    }
+
+    // Commit the transaction
+    await pool.query('COMMIT');
+
+    res.status(200).json({ message: 'Plan updated successfully' });
+  } catch (error) {
+    // Rollback the transaction if an error occurs
+    await pool.query('ROLLBACK');
+
+    console.error('Error updating plan:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+};
+
 
 module.exports = { 
     getPlansByProjectId,
-    createPlan
+    createPlan,
+    updatePlan
 };
 
 
