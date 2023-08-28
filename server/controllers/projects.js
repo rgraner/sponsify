@@ -65,7 +65,7 @@ const getProjectsBysponsorId = async (req, res) => {
         if (!result[sponsor_name]) {
             result[sponsor_name] = {
                 sponsor_id: row.sponsor_id,
-                sponsor: sponsor_name,
+                sponsor_name: sponsor_name,
                 projects: [],
             };
         }
