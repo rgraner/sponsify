@@ -9,6 +9,7 @@ const projectsRoute = require('./routes/projects');
 const plansRoute = require('./routes/plans');
 const cartRoute = require('./routes/cart');
 const checkoutRoute = require('./routes/checkout');
+const authRoute = require('./routes/auth');
 
 
 const app = express();
@@ -23,12 +24,10 @@ app.use('/api/projects', projectsRoute);
 app.use('/api/plans', plansRoute);
 app.use('/api/cart', cartRoute);
 app.use('/api/checkout', checkoutRoute);
+app.use('/api/auth', authRoute);
 
 // Start the server
 const port = process.env.PORT;
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
-
-
-

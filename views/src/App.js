@@ -1,17 +1,16 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import { Provider } from 'react-redux'; // Add this import
+import { Provider } from 'react-redux'; 
 import Navbar from './components/navbar/Navbar';
 import Footer from './components/footer/Footer';
 import Projects from './components/projects/Projects';
 import ProjectPage from './components/projects/ProjectPage';
 import Sponsors from './components/sponsors/Sponsors';
 import SponsorPage from './components/sponsors/SponsorPage';
-import store from './redux/store'; // Add this import
-
+import SponsorRegistration from './components/auth/SponsorRegistration';
+import store from './redux/store';
 
 function App() {
-
   return (
     <Provider store={store}>
       <Router>
@@ -21,6 +20,7 @@ function App() {
           <Route path="projects/:projectId" element={<ProjectPage />} />
           <Route exact path="/sponsors" element={<Sponsors />} />
           <Route path="sponsors/:sponsorId" element={<SponsorPage />} />
+          <Route path="sponsor-registration" element={<SponsorRegistration />} />
         </Routes>
         <Footer />
       </Router>
