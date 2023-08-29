@@ -3,7 +3,18 @@ const pool = require('../models/pool')
 
 // Get all sponsors
 const getAllSponsors = (req, res) => {
-    pool.query('SELECT * FROM sponsors', (error, results) => {
+    pool.query(
+      'SELECT\
+      sponsors.id,\
+      sponsors.name,\
+      users.username,\
+      users.email,\
+      sponsors.description,\
+      sponsors.logo,\
+      users.created_at,\
+      users.updated_at\
+      FROM users INNER JOIN sponsors ON users.id = sponsors.user_id;',
+      (error, results) => {
       if (error) {
         throw error;
       }
@@ -17,7 +28,17 @@ const getSponsorById = async ( req, res) => {
 
   try {
       const sponsor = await pool.query(
-          'SELECT * FROM sponsors WHERE id = $1',
+          'SELECT\
+          sponsors.id,\
+          sponsors.name,\
+          users.username,\
+          users.email,\
+          sponsors.description,\
+          sponsors.logo,\
+          users.created_at,\
+          users.updated_at\
+          FROM users INNER JOIN sponsors ON users.id = sponsors.user_id\
+          WHERE sponsors.id = $1',
           [sponsorId]
       );
 
