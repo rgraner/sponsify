@@ -3,7 +3,18 @@ const pool = require('../models/pool')
 
 // Get all projects
 const getAllProjects = (req, res) => {
-    pool.query('SELECT * FROM projects', (error, results) => {
+    pool.query(
+      'SELECT\
+      projects.id,\
+      projects.name,\
+      users.username,\
+      users.email,\
+      projects.description,\
+      projects.logo,\
+      users.created_at,\
+      users.updated_at\
+      FROM users INNER JOIN projects ON users.id = projects.user_id;',
+      (error, results) => {
       if (error) {
         throw error;
       }
@@ -17,8 +28,18 @@ const getProjectById = async ( req, res) => {
 
     try {
         const project = await pool.query(
-            'SELECT * FROM projects WHERE id = $1',
-            [projectId]
+          'SELECT\
+          projects.id,\
+          projects.name,\
+          users.username,\
+          users.email,\
+          projects.description,\
+          projects.logo,\
+          users.created_at,\
+          users.updated_at\
+          FROM users INNER JOIN projects ON users.id = projects.user_id\
+          WHERE projects.id = $1',
+          [projectId]
         );
 
         if(project.rows.length === 0) {
