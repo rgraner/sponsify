@@ -1,16 +1,24 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux'; 
+import {
+  registerSponsorRequest,
+  registerSponsorSuccess,
+  registerSponsorFailure,
+} from '../../redux/actions/registrationActions';
 
-const SponsorRegistration = () => {
+const SponsorRegistration = ({
+  registrationState, // Access the registration state from Redux
+  registerSponsorRequest,
+  registerSponsorSuccess,
+  registerSponsorFailure,
+}) => {
   const [formData, setFormData] = useState({
     username: '',
     email: '',
     password: '',
     confirmPassword: '',
   });
-  const [loading, setLoading] = useState(false); // Track loading state
-  const [registrationSuccess, setRegistrationSuccess] = useState(false);
-  const [passwordsMatch, setPasswordsMatch] = useState(true);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -20,20 +28,15 @@ const SponsorRegistration = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Check if passwords match
+    // Check the password confirmation field
     if (formData.password !== formData.confirmPassword) {
-      setPasswordsMatch(false);
-      return; // Exit early if passwords don't match
+      // Passwords don't match, handle the error
+      console.error('Passwords do not match');
+      return; // Prevent further processing
     }
 
-    setLoading(true); // Start loading indicator
-
-    // Send registration data to the backend
-    // const registrationData = {
-    //   username: formData.username,
-    //   email: formData.email,
-    //   password: formData.password,
-    // };
+    // Dispatch the request action to indicate that registration is in progress
+    registerSponsorRequest();
 
     try {
       const response = await fetch('/api/auth/register/sponsor', {
@@ -45,90 +48,119 @@ const SponsorRegistration = () => {
       })
       if (response.status === 201) {
         // Successful registration, reset the form fields
-        setRegistrationSuccess(true);
+        registerSponsorSuccess();
         // Reset the form fields
         setFormData({
           username: '',
           email: '',
           password: '',
+          confirmPassword: '',
         });
+      } else if (response.status === 400) {
+        // Handle registration error with specific error message
+        const data = await response.json();
+        if (data.error === 'Email already in use') {
+          registerSponsorFailure('Email already in use');
+        } else if (data.error === 'Username already in use') {
+          registerSponsorFailure('Username already in use');
+        } else {
+          // Handle other 400 errors if needed
+          console.error('Registration failed with unknown error');
+          registerSponsorFailure('Registration failed with unknown error');
+        }
       } else {
-          // Handle registration error
-          console.error('Registration failed');
+        // Handle other response status codes (e.g., 500) if needed
+        console.error('Registration failed with unknown error');
+        registerSponsorFailure('Registration failed with unknown error');
       }
     } catch (error) {
-        // Handle network error
-        console.error('Network error:', error);
-    } finally {
-      setLoading(false); // Stop loading indicator
-    }
+      // Handle network error
+      console.error('Registration failed', error);
+      registerSponsorFailure('Registration failed');
+    } 
   };
 
   return (
     <div className="container">
-      <h2>Sponsor Registration</h2>
-      {registrationSuccess ? (
-        <p>Registration successful! You can now <Link to="/login">Login</Link></p>
+      {registrationState.success ? (
+        <div>
+          <p>Registration successful! You can now <Link to="/login">login</Link>.</p>
+        </div>
       ) : (
-        <form onSubmit={handleSubmit}>
-          <div>
-            <label htmlFor="username">Username</label>
-            <input
-              type="text"
-              id="username"
-              name="username"
-              autoComplete="username"
-              value={formData.username}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          <div>
-            <label htmlFor="email">Email</label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              autoComplete="email"
-              value={formData.email}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          <div>
-            <label htmlFor="password">Password</label>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              autoComplete="current-password"
-              value={formData.password}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          <div>
-            <label htmlFor="confirmPassword">Confirm Password</label>
-            <input
-              type="password"
-              id="confirmPassword"
-              name="confirmPassword"
-              autoComplete="current-password"
-              value={formData.confirmPassword}
-              onChange={handleChange}
-              required
-            />
-            {!passwordsMatch && <p>Passwords do not match</p>}
-          </div>
-          <div>
-            <button type="submit" disabled={loading}>
-                {loading ? 'Registering...' : 'Register'}
-            </button>
-          </div>
-        </form>
+      <div>
+        <h2>Sponsor Registration</h2>
+
+        {registrationState.isLoading && <p>Registering...</p>}
+        
+        {registrationState.error && <p>{registrationState.error}</p>}
+
+          <form onSubmit={handleSubmit}>
+            <div>
+              <label htmlFor="username">Username</label>
+              <input
+                type="text"
+                id="username"
+                name="username"
+                autoComplete="username"
+                value={formData.username}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div>
+              <label htmlFor="email">Email</label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                autoComplete="email"
+                value={formData.email}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div>
+              <label htmlFor="password">Password</label>
+              <input
+                type="password"
+                id="password"
+                name="password"
+                autoComplete="current-password"
+                value={formData.password}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div>
+              <label htmlFor="confirmPassword">Confirm Password</label>
+              <input
+                type="password"
+                id="confirmPassword"
+                name="confirmPassword"
+                autoComplete="current-password"
+                value={formData.confirmPassword}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div>
+              <button type="submit">Register</button>
+            </div>
+          </form>
+        </div>
       )}
     </div>
   );
 };
 
-export default SponsorRegistration;
+const mapStateToProps = (state) => ({
+  registrationState: state.registration, // Map the registration state to props
+});
+
+const mapDispatchToProps = {
+  registerSponsorRequest,
+  registerSponsorSuccess,
+  registerSponsorFailure,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(SponsorRegistration);
