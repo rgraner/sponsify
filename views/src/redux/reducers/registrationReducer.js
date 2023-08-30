@@ -2,6 +2,9 @@ import {
     REGISTER_SPONSOR_REQUEST,
     REGISTER_SPONSOR_SUCCESS,
     REGISTER_SPONSOR_FAILURE,
+    REGISTER_PROJECT_REQUEST,
+    REGISTER_PROJECT_SUCCESS,
+    REGISTER_PROJECT_FAILURE,
     RESET_REGISTRATION_STATE
   } from '../actions/registrationActions';
   
@@ -38,6 +41,30 @@ import {
           success: false,
           error: action.payload,
         };
+
+        case REGISTER_PROJECT_REQUEST:
+          return {
+            ...state,
+            isLoading: true,
+            success: false,
+            error: null,
+          };
+    
+        case REGISTER_PROJECT_SUCCESS:
+          return {
+            ...state,
+            isLoading: false,
+            success: true,
+            error: null,
+          };
+    
+        case REGISTER_PROJECT_FAILURE:
+          return {
+            ...state,
+            isLoading: false,
+            success: false,
+            error: action.payload,
+          };
       
       case RESET_REGISTRATION_STATE:
         return {

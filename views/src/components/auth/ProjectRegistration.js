@@ -2,16 +2,16 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux'; 
 import {
-  registerSponsorRequest,
-  registerSponsorSuccess,
-  registerSponsorFailure,
+  registerProjectRequest,
+  registerProjectSuccess,
+  registerProjectFailure,
 } from '../../redux/actions/registrationActions';
 
 const SponsorRegistration = ({
   registrationState, // Access the registration state from Redux
-  registerSponsorRequest,
-  registerSponsorSuccess,
-  registerSponsorFailure,
+  registerProjectRequest,
+  registerProjectSuccess,
+  registerProjectFailure,
 }) => {
   const [formData, setFormData] = useState({
     username: '',
@@ -36,10 +36,10 @@ const SponsorRegistration = ({
     }
 
     // Dispatch the request action to indicate that registration is in progress
-    registerSponsorRequest();
+    registerProjectRequest();
 
     try {
-      const response = await fetch('/api/auth/register/sponsor', {
+      const response = await fetch('/api/auth/register/project', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -48,7 +48,7 @@ const SponsorRegistration = ({
       })
       if (response.status === 201) {
         // Successful registration, reset the form fields
-        registerSponsorSuccess();
+        registerProjectSuccess();
         // Reset the form fields
         setFormData({
           username: '',
@@ -60,23 +60,23 @@ const SponsorRegistration = ({
         // Handle registration error with specific error message
         const data = await response.json();
         if (data.error === 'Email already in use') {
-          registerSponsorFailure('Email already in use');
+          registerProjectFailure('Email already in use');
         } else if (data.error === 'Username already in use') {
-          registerSponsorFailure('Username already in use');
+          registerProjectFailure('Username already in use');
         } else {
           // Handle other 400 errors if needed
           console.error('Registration failed with unknown error');
-          registerSponsorFailure('Registration failed with unknown error');
+          registerProjectFailure('Registration failed with unknown error');
         }
       } else {
         // Handle other response status codes (e.g., 500) if needed
         console.error('Registration failed with unknown error');
-        registerSponsorFailure('Registration failed with unknown error');
+        registerProjectFailure('Registration failed with unknown error');
       }
     } catch (error) {
       // Handle network error
       console.error('Registration failed', error);
-      registerSponsorFailure('Registration failed');
+      registerProjectFailure('Registration failed');
     } 
   };
 
@@ -88,7 +88,7 @@ const SponsorRegistration = ({
         </div>
       ) : (
       <div>
-        <h2>Sponsor Registration</h2>
+        <h2>Project Registration</h2>
 
         {registrationState.isLoading && <p>Registering...</p>}
         
@@ -144,7 +144,7 @@ const SponsorRegistration = ({
               />
             </div>
             <div>
-              <button type="submit">Register Sponsor</button>
+              <button type="submit">Register Project</button>
             </div>
           </form>
         </div>
@@ -158,9 +158,9 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = {
-  registerSponsorRequest,
-  registerSponsorSuccess,
-  registerSponsorFailure,
+  registerProjectRequest,
+  registerProjectSuccess,
+  registerProjectFailure,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(SponsorRegistration);
