@@ -1,8 +1,14 @@
 require('dotenv').config();
 
 const express = require('express');
+const session = require('express-session');
 const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
 const cors = require('cors');
+const app = express();
+const port = process.env.PORT;
+
+const passport = require('./loaders/passport');
 
 const sponsorsRoute = require('./routes/sponsors');
 const projectsRoute = require('./routes/projects');
@@ -11,12 +17,17 @@ const cartRoute = require('./routes/cart');
 const checkoutRoute = require('./routes/checkout');
 const authRoute = require('./routes/auth');
 
-
-const app = express();
-
 // Middleware
 app.use(bodyParser.json());
 app.use(cors());
+app.use(cookieParser());
+app.use(session({
+  secret: process.env.SESSION_SECRET_KEY,
+  resave: false,
+  saveUninitialized: false,
+  cookie: { secure: false }
+}));
+app.use(passport.initialize());
 
 // Routes
 app.use('/api/sponsors', sponsorsRoute);
@@ -27,7 +38,6 @@ app.use('/api/checkout', checkoutRoute);
 app.use('/api/auth', authRoute);
 
 // Start the server
-const port = process.env.PORT;
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
