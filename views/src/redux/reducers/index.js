@@ -7,6 +7,7 @@ import sponsorReducer from './sponsorReducer';
 import sponsorsByProjectReducer from './sponsorsByProjectReducer';
 import plansReducer from './plansReducer';
 import registrationReducer from './registrationReducer';
+import authenticationReducer from './authenticationReducer';
 
 const rootReducer = combineReducers({
   projects: projectsReducer,
@@ -16,7 +17,8 @@ const rootReducer = combineReducers({
   sponsor: sponsorReducer,
   sponsorsByProject: sponsorsByProjectReducer,
   plans: plansReducer,
-  registration: registrationReducer
+  registration: registrationReducer,
+  authentication: authenticationReducer,
 });
 
 export default rootReducer;

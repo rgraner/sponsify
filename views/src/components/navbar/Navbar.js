@@ -1,4 +1,5 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import './Navbar.css';
 // import logo from '../../images/sponsify.png';
@@ -6,6 +7,8 @@ import './Navbar.css';
 
 
 function Navbar() {
+  const isLoggedIn = useSelector((state) => state.authentication.isLoggedIn);
+
   return (
     <nav className="navbar">
       <div className="container container-flex">
@@ -16,9 +19,11 @@ function Navbar() {
         <div className="navbar-items">
           <Link to="/projects">Projects</Link>
           <Link to="/sponsors">Sponsors</Link>
-          <Link to="/signin">Sign In</Link>
-          <Link to="/signout">Sign Out</Link>
-          <Link to="/register">Register</Link>
+          {isLoggedIn ? (
+            <Link to="/logout">Logout</Link>
+          ) : (
+            <Link to="/login">Login</Link>
+          )}
           <Link to="/basket">Basket(0)</Link>
         </div>
       </div>

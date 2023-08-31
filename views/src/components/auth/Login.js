@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { loginSuccess } from '../../redux/actions/authenticationActions';
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -7,6 +9,7 @@ const Login = () => {
     password: '',
   });
 
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -23,8 +26,6 @@ const Login = () => {
       password: formData.password,
     };
 
-    console.log('loginData: ', loginData);
-
     // Make an API request to the login endpoint here
     // You can use fetch or axios for this purpose
     try {
@@ -39,8 +40,7 @@ const Login = () => {
       if (response.status === 200) {
         // Successful login, you can handle the success here
         console.log('Login successful');
-        // Redirect the user to the dashboard or another page
-        // You can use react-router-dom's history or <Redirect> for this purpose
+        dispatch(loginSuccess());
         navigate('/sponsors');
       } else {
         // Handle login error
