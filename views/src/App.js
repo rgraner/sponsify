@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import { Provider } from 'react-redux'; 
+import {useDispatch } from 'react-redux'; 
 import Navbar from './components/navbar/Navbar';
 import Footer from './components/footer/Footer';
 import Projects from './components/projects/Projects';
@@ -11,26 +11,34 @@ import SponsorRegistration from './components/auth/SponsorRegistration';
 import ProjectRegistration from './components/auth/ProjectRegistration';
 import Login from './components/auth/Login';
 import Logout from './components/auth/Logout';
-import store from './redux/store';
+import { loginSuccess } from './redux/actions/authenticationActions';
 
 function App() {
+  //  Store isLoggedIn to maintain the persistence of the login session
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const storedIsLoggedIn = localStorage.getItem('isLoggedIn');
+    if (storedIsLoggedIn === 'true') {
+      dispatch(loginSuccess()); // Dispatch a login success action to set isLoggedIn to true
+    }
+  }, [dispatch]);
+  
   return (
-    <Provider store={store}>
-      <Router>
-        <Navbar />
-        <Routes>
-          <Route exact path="/projects" element={<Projects />} />
-          <Route path="projects/:projectId" element={<ProjectPage />} />
-          <Route exact path="/sponsors" element={<Sponsors />} />
-          <Route path="sponsors/:sponsorId" element={<SponsorPage />} />
-          <Route path="sponsor-registration" element={<SponsorRegistration />} />
-          <Route path="project-registration" element={<ProjectRegistration />} />
-          <Route path="login" element={<Login />} />
-          <Route path="logout" element={<Logout />} />
-        </Routes>
-        <Footer />
-      </Router>
-    </Provider>
+    <Router>
+      <Navbar />
+      <Routes>
+        <Route exact path="/projects" element={<Projects />} />
+        <Route path="projects/:projectId" element={<ProjectPage />} />
+        <Route exact path="/sponsors" element={<Sponsors />} />
+        <Route path="sponsors/:sponsorId" element={<SponsorPage />} />
+        <Route path="sponsor-registration" element={<SponsorRegistration />} />
+        <Route path="project-registration" element={<ProjectRegistration />} />
+        <Route path="login" element={<Login />} />
+        <Route path="logout" element={<Logout />} />
+      </Routes>
+      <Footer />
+    </Router>
   );
 }
 

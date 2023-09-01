@@ -17,17 +17,14 @@ const Login = () => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
+  const handleLogin = async () => {
     // Send login data to the backend
     const loginData = {
       email: formData.email,
       password: formData.password,
     };
 
-    // Make an API request to the login endpoint here
-    // You can use fetch or axios for this purpose
+    // Make an API request to the login endpoint
     try {
       const response = await fetch('/api/auth/login', {
         method: 'POST',
@@ -40,7 +37,14 @@ const Login = () => {
       if (response.status === 200) {
         // Successful login, you can handle the success here
         console.log('Login successful');
+
+        // Dispatch login success action to update Redux store
         dispatch(loginSuccess());
+
+        // Store in localStorage
+        localStorage.setItem('isLoggedIn', 'true');
+
+        // Navigate to the desired page
         navigate('/sponsors');
       } else {
         // Handle login error
@@ -51,6 +55,11 @@ const Login = () => {
       // Handle network error
       console.error('Network error:', error);
     }
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    handleLogin(); // Call handleLogin when the form is submitted
   };
 
   return (

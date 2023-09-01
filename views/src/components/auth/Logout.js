@@ -15,9 +15,11 @@ const Logout = () => {
             headers: { 'Content-Type': 'application/json' },
             });
             if (response.status === 200) {
-                dispatch(logoutSuccess());
-                navigate('/login');
                 console.log('Logout success')
+                dispatch(logoutSuccess());
+                // Clear local storage
+                localStorage.removeItem('isLoggedIn');
+                navigate('/login');
             } else {
             // handle error response
             }
