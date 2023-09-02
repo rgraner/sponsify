@@ -35,6 +35,8 @@ const Login = () => {
       });
 
       if (response.status === 200) {
+        const responseData = await response.json();
+        console.log(responseData.user.user_type);
         // Successful login, you can handle the success here
         console.log('Login successful');
 
@@ -44,8 +46,12 @@ const Login = () => {
         // Store in localStorage
         localStorage.setItem('isLoggedIn', 'true');
 
-        // Navigate to the desired page
-        navigate('/sponsors');
+        // Determine the user type and redirect accordingly
+        if (responseData.user.user_type === 'sponsor') {
+          navigate('/sponsors');
+        } else {
+          navigate('/projects');
+        }
       } else {
         // Handle login error
         console.error('Login failed');
