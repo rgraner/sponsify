@@ -39,7 +39,7 @@ function ProjectPage({ project, fetchProject, sponsorsByProject, fetchSponsorsBy
         {sponsorsByProject.length > 0 ? (
         <div className="items no-list">
           {sponsorsByProject[0].sponsors.map((sponsor) => (
-            <li key={sponsor.project_name}>
+            <li key={sponsor.sponsor_id}>
               <div className="companies-logo">
                   <Link to={`/sponsors/${sponsor.sponsor_id}`}>
                       <img src={`/images/companies-logo/${sponsor.sponsor_logo}`} alt={sponsor.sponsor_name}></img>
