@@ -11,6 +11,41 @@ function Plans({ plans, fetchPlansByProjectId, projectId }) {
         }
     }, [fetchPlansByProjectId, projectId]);
 
+    const handleAddToCart = async (planId) => {
+        console.log('planId: ', planId);
+        try {
+            const response = await fetch('/api/auth/check');
+            if (!response.ok) {
+                throw new Error(response.statusText);
+            }
+            const user = await response.json();
+            const userId = user.id;
+            
+            // Make a POST request to add the plan to the cart
+            const response2 = await fetch(`/api/cart/user/${userId}`, {
+                method: 'POST',
+                headers: {
+                'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ plan_id: planId }), // Send the plan ID in the request body
+            });
+    
+            if (response2.status === 201) {
+                // Handle success
+                console.log('Plan added to the cart successfully');
+    
+                // Optionally, dispatch an action to update your Redux store here
+                // dispatch(planAddedToCart(planId));
+            } else {
+                // Handle error
+                console.error('Failed to add plan to the cart');
+            }
+            } catch (error) {
+            // Handle network error
+            console.error('Network error:', error);
+            }
+        };
+
     return (
         <div className="card">
             {plans.map((plan) => (
@@ -26,7 +61,7 @@ function Plans({ plans, fetchPlansByProjectId, projectId }) {
                     ))}
                     </ul>
                 </div>
-                <div className="plan-card-footer">Buy Now</div>
+                <div className="plan-card-footer" onClick={() => handleAddToCart(plan.plan_id)}>Buy Now</div>
                 </div>
             ))}
         </div>
