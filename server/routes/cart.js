@@ -4,7 +4,7 @@ const dbCart = require('../controllers/cart');
 
 
 router.get('/sponsor/:sponsorId', dbCart.getCartItem);
-router.post('/add', dbCart.addToCart);
+router.post('/user/:userId', dbCart.addToCart);
 router.delete('/:cartId', dbCart.deleteCartItem);
 
 

@@ -35,13 +35,14 @@ const { sponsorId } = req.params;
 
 // Add a sponsorship plan to the cart
 const addToCart = async (req, res) => {
-    const { sponsor_id, plan_id } = req.body;
+    const { userId } = req.params;
+    const { plan_id } = req.body;
 
     try {
         // Check if there is already an item in the cart
         const existingCartItem = await pool.query(
-            'SELECT * FROM cart WHERE sponsor_id = $1',
-            [sponsor_id]
+            'SELECT * FROM cart WHERE user_id = $1',
+            [userId]
         );
 
         if (existingCartItem.rows.length > 0) {
@@ -50,8 +51,8 @@ const addToCart = async (req, res) => {
 
         // Insert the item into the cart 
         await pool.query(
-            'INSERT INTO cart (sponsor_id, plan_id) VALUES ($1, $2)',
-            [sponsor_id, plan_id]
+            'INSERT INTO cart (user_id, plan_id) VALUES ($1, $2)',
+            [userId, plan_id]
         );
 
         res.status(201).json({ message: 'Plan added to cart successfully' });
