@@ -8,7 +8,7 @@ import sponsorsByProjectReducer from './sponsorsByProjectReducer';
 import plansReducer from './plansReducer';
 import registrationReducer from './registrationReducer';
 import authenticationReducer from './authenticationReducer';
-import cartReducer from './cartReducer';
+import cartItemReducer from './cartItemReducer';
 
 const rootReducer = combineReducers({
   projects: projectsReducer,
@@ -20,7 +20,7 @@ const rootReducer = combineReducers({
   plans: plansReducer,
   registration: registrationReducer,
   authentication: authenticationReducer,
-  cartItem: cartReducer,
+  cartItem: cartItemReducer,
 });
 
 export default rootReducer;

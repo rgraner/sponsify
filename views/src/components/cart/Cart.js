@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { fetchCartItem, removeCartItem } from '../../redux/actions/cartActions';
+import { fetchCartItem, removeCartItem } from '../../redux/actions/cartItemActions';
 
 function Cart( {cartItem, fetchCartItem, removeCartItem} ) {
   const { userId } = useParams();
@@ -17,9 +17,9 @@ function Cart( {cartItem, fetchCartItem, removeCartItem} ) {
   return (
     <div className="container">
       <h2>Your Cart</h2>
-      {cartItem[0] ? (
+      {cartItem.cartItem[0] ? (
         <div>
-          <p>{cartItem[0].name} - {cartItem[0].price}</p>
+          <p>{cartItem.cartItem[0].name} - {cartItem.cartItem[0].price}</p>
           <button onClick={handleRemoveFromCart}>Remove from Cart</button>
         </div>
       ) : (
@@ -34,7 +34,7 @@ const mapStateToProps = (state) => ({
   });
   
   const mapDispatchToProps = {
-    fetchCartItem, // Map the fetchCartPlan action to props
+    fetchCartItem, // Map the fetchCartItem action to props
     removeCartItem,
   };
   
