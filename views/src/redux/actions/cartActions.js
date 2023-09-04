@@ -35,6 +35,7 @@ export const fetchCartItem = (userId) => {
 export const removeCartItem = (userId) => {
     return async (dispatch) => {
         try{
+            console.log("Removing cart item for user:", userId);
             const response = await fetch(`/api/cart/user/${userId}`, {
                 method: 'DELETE',
             });

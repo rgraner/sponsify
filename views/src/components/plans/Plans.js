@@ -12,7 +12,6 @@ function Plans({ plans, fetchPlansByProjectId, projectId }) {
     }, [fetchPlansByProjectId, projectId]);
 
     const handleAddToCart = async (planId) => {
-        console.log('planId: ', planId);
         try {
             const response = await fetch('/api/auth/check');
             if (!response.ok) {

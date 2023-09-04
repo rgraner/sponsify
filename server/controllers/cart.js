@@ -64,13 +64,13 @@ const addToCart = async (req, res) => {
 
 // Delete a cart item
 const deleteCartItem = async (req, res) => {
-    const { cartId } = req.params;
+    const { userId } = req.params;
   
     try {
       // Check if the cart item exists
       const cartItem = await pool.query(
-        'SELECT * FROM cart WHERE id = $1',
-        [cartId]
+        'SELECT * FROM cart WHERE user_id = $1',
+        [userId]
       );
   
       if (cartItem.rows.length === 0) {
@@ -79,8 +79,8 @@ const deleteCartItem = async (req, res) => {
   
       // Delete the cart item
       await pool.query(
-        'DELETE FROM cart WHERE id = $1',
-        [cartId]
+        'DELETE FROM cart WHERE user_id = $1',
+        [userId]
       );
   
       res.status(200).send('Plan removed from the cart successfully'); // Respond with a 204 status (No Content) for a successful deletion.
