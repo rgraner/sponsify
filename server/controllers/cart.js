@@ -2,24 +2,24 @@ const pool = require('../models/pool')
 
 
 const getCartItem = async (req, res) => {
-const { sponsorId } = req.params;
+const { userId } = req.params;
 
     try {
         // Check if the sponsor exists
-        const sponsor = await pool.query(
-            'SELECT * FROM sponsors WHERE id = $1',
-            [sponsorId]
+        const user = await pool.query(
+            'SELECT * FROM users WHERE id = $1',
+            [userId]
         );
-        if (sponsor.rows.length === 0) {
-            return res.status(404).json({ message: 'Sponsor not found' });
+        if (user.rows.length === 0) {
+            return res.status(404).json({ message: 'User not found' });
         }
 
         // Get the sponsorship plan in the cart
         const cartItem = await pool.query(
-            'SELECT c.sponsor_id, p.name, p.price FROM cart c \
+            'SELECT c.user_id, p.name, p.price FROM cart c \
             JOIN plans p ON p.id = c.plan_id \
-            WHERE c.sponsor_id = $1',
-            [sponsorId]
+            WHERE c.user_id = $1',
+            [userId]
         );
         if (cartItem.rows.length === 0) {
             return res.status(404).json({ message: 'No sponsorship plan in the cart' });

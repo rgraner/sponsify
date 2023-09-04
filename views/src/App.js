@@ -11,6 +11,7 @@ import SponsorRegistration from './components/auth/SponsorRegistration';
 import ProjectRegistration from './components/auth/ProjectRegistration';
 import Login from './components/auth/Login';
 import Logout from './components/auth/Logout';
+import Cart from './components/cart/Cart';
 import { loginSuccess } from './redux/actions/authenticationActions';
 
 function App() {
@@ -29,13 +30,14 @@ function App() {
       <Navbar />
       <Routes>
         <Route exact path="/projects" element={<Projects />} />
-        <Route path="projects/:projectId" element={<ProjectPage />} />
+        <Route path="/projects/:projectId" element={<ProjectPage />} />
         <Route exact path="/sponsors" element={<Sponsors />} />
-        <Route path="sponsors/:sponsorId" element={<SponsorPage />} />
-        <Route path="sponsor-registration" element={<SponsorRegistration />} />
-        <Route path="project-registration" element={<ProjectRegistration />} />
-        <Route path="login" element={<Login />} />
-        <Route path="logout" element={<Logout />} />
+        <Route path="/sponsors/:sponsorId" element={<SponsorPage />} />
+        <Route path="/sponsor-registration" element={<SponsorRegistration />} />
+        <Route path="/project-registration" element={<ProjectRegistration />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/logout" element={<Logout />} />
+        <Route path="/cart/:userId" element={<Cart />} />
       </Routes>
       <Footer />
     </Router>
