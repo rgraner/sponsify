@@ -8,6 +8,7 @@ import './Navbar.css';
 
 function Navbar() {
   const isLoggedIn = useSelector((state) => state.authentication.isLoggedIn);
+  const user = JSON.parse(localStorage.getItem('userData'));
 
   return (
     <nav className="navbar">
@@ -20,7 +21,10 @@ function Navbar() {
           <Link to="/projects">Projects</Link>
           <Link to="/sponsors">Sponsors</Link>
           {isLoggedIn ? (
-            <Link to="/logout">Logout</Link>
+            <div>
+              <span>Hello, {user.username}</span>
+              <Link to="/logout">Logout</Link>
+            </div>
           ) : (
             <Link to="/login">Login</Link>
           )}

@@ -19,6 +19,7 @@ const Logout = () => {
                 dispatch(logoutSuccess());
                 // Clear local storage
                 localStorage.removeItem('isLoggedIn');
+                localStorage.removeItem('userData');
                 navigate('/login');
             } else {
             // handle error response

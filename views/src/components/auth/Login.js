@@ -36,7 +36,6 @@ const Login = () => {
 
       if (response.status === 200) {
         const responseData = await response.json();
-        console.log(responseData.user.user_type);
         // Successful login, you can handle the success here
         console.log('Login successful');
 
@@ -45,6 +44,8 @@ const Login = () => {
 
         // Store in localStorage
         localStorage.setItem('isLoggedIn', 'true');
+        localStorage.setItem('userData', JSON.stringify(responseData.user));
+        
 
         // Determine the user type and redirect accordingly
         if (responseData.user.user_type === 'sponsor') {
