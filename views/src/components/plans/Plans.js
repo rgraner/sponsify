@@ -51,7 +51,7 @@ function Plans({ plans, fetchPlansByProjectId, projectId }) {
                 <div className="plan-card" key={plan.plan_id}>
                 <div className="plan-card-header">
                     <h3>{plan.name}</h3>
-                    <p>{plan.price === 0 ? 'Free' : `€${plan.price}`}</p>
+                    <p>{plan.price === 0.00 ? 'Free' : `€${plan.price}/Month`}</p>
                 </div>
                 <div className="plan-card-body">
                     <ul>

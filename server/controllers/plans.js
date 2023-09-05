@@ -30,7 +30,7 @@ const getPlansByProjectId = async (req, res) => {
                 result.push({
                     plan_id: row.id,
                     project_id: row.project_id,
-                    price: row.price,
+                    price: parseFloat(row.price),
                     name: row.name,
                     benefits: [],
                     created_at: row.created_at,
