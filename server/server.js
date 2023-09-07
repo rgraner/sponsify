@@ -16,9 +16,11 @@ const plansRoute = require('./routes/plans');
 const cartRoute = require('./routes/cart');
 const checkoutRoute = require('./routes/checkout');
 const authRoute = require('./routes/auth');
+const paymentRoute = require('./routes/payment');
 
 // Middleware
-app.use(bodyParser.json());
+app.use(bodyParser.json({ verify: (req, res, buf) => { req.rawBody = buf; } }));
+app.use(bodyParser.urlencoded({extended: true}));
 app.use(cors());
 app.use(cookieParser());
 app.use(session({
@@ -36,6 +38,8 @@ app.use('/api/plans', plansRoute);
 app.use('/api/cart', cartRoute);
 app.use('/api/checkout', checkoutRoute);
 app.use('/api/auth', authRoute);
+app.use('/api/payment', paymentRoute);
+
 
 // Start the server
 app.listen(port, () => {
