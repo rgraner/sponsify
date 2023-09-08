@@ -1,16 +1,15 @@
 import React from 'react';
 
 
-export const SuccessDisplay = ({ sessionId }) => {
+const PaymentSuccess = ({ sessionId }) => {
     return (
       <section>
         <div className="product Box-root">
-          <Logo />
           <div className="description Box-root">
             <h3>Subscription to starter plan successful!</h3>
           </div>
         </div>
-        <form action="/create-portal-session" method="POST">
+        <form action="/api/payment/create-portal-session" method="POST">
           <input
             type="hidden"
             id="session-id"
@@ -24,3 +23,5 @@ export const SuccessDisplay = ({ sessionId }) => {
       </section>
     );
 };
+
+export default PaymentSuccess;

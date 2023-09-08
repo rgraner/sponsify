@@ -13,6 +13,7 @@ import Login from './components/auth/Login';
 import Logout from './components/auth/Logout';
 import Cart from './components/cart/Cart';
 import { loginSuccess } from './redux/actions/authenticationActions';
+import PaymentFlow from './components/payment/PaymentFlow';
 
 function App() {
   //  Store isLoggedIn to maintain the persistence of the login session
@@ -38,6 +39,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/logout" element={<Logout />} />
         <Route path="/cart" element={<Cart />} />
+        <Route path="/*" element={<PaymentFlow />} />
       </Routes>
       <Footer />
     </Router>
