@@ -3,24 +3,24 @@ import React from 'react';
 
 const PaymentSuccess = ({ sessionId }) => {
     return (
-      <section>
-        <div className="product Box-root">
-          <div className="description Box-root">
-            <h3>Subscription to starter plan successful!</h3>
+      <div className="container v-center">
+        <section>
+          <div className="message">
+            <p>Subscription to starter plan successful!</p>
           </div>
-        </div>
-        <form action="/api/payment/create-portal-session" method="POST">
-          <input
-            type="hidden"
-            id="session-id"
-            name="session_id"
-            value={sessionId}
-          />
-          <button id="checkout-and-portal-button" type="submit">
-            Manage your billing information
-          </button>
-        </form>
-      </section>
+          <form action="/api/payment/create-portal-session" method="POST">
+            <input
+              type="hidden"
+              id="session-id"
+              name="session_id"
+              value={sessionId}
+            />
+            <button className="button" id="checkout-and-portal-button" type="submit">
+              Manage your billing information
+            </button>
+          </form>
+        </section>
+      </div>
     );
 };
 
