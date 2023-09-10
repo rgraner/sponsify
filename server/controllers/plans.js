@@ -1,4 +1,6 @@
-const pool = require('../models/pool')
+const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
+const pool = require('../models/pool');
+const randomNumber = require("../utils/randomNumber");
 
 
 // Get plans for a specific project_id
@@ -33,6 +35,7 @@ const getPlansByProjectId = async (req, res) => {
                     price: parseFloat(row.price),
                     name: row.name,
                     benefits: [],
+                    stripe_lookup_key: row.stripe_lookup_key,
                     created_at: row.created_at,
                     updated_at: row.updated_at
                 });
@@ -50,42 +53,53 @@ const getPlansByProjectId = async (req, res) => {
 };
 
 
-const createPlan = (req, res) => {
+const createPlan = async (req, res) => {
     const { project_id, name, price, benefits } = req.body;
 
-    // Perform data validation here if needed
+    const stripeLookupKey = `project-${project_id}-${name.toLowerCase().replace(/ /g, '-')}-${randomNumber(5)}`;
 
-    // Insert the new plan into the database
-    pool.query(
-        'INSERT INTO plans (project_id, name, price) VALUES ($1, $2, $3) RETURNING id',
-        [project_id, name, price],
-        (error, result) => {
-        if (error) {
-            console.error('Error creating plan:', error);
-            res.status(500).json({ message: 'Internal server error' });
-        } else {
-            const planId = result.rows[0].id;
+    const stripeProduct = await stripe.products.create({
+        name: name,
+    });
 
-            // Insert plan benefits if provided
-            if (benefits && benefits.length > 0) {
-            benefits.forEach((benefit) => {
-                pool.query(
-                    'INSERT INTO plan_benefits (plan_id, benefit) VALUES ($1, $2)',
-                    [planId, benefit],
-                    (benefitsError) => {
-                        if (benefitsError) {
-                            console.error('Error inserting plan benefits:', benefitsError);
-                            res.status(500).json({ message: 'Internal server error' });
-                        }
-                    }
-                );
-            });
+    await stripe.prices.create({
+        unit_amount: price * 100,
+        currency: 'eur',
+        recurring: {interval: 'month'},
+        product: stripeProduct.id,
+        lookup_key: stripeLookupKey
+    });
+
+    try {
+        // Perform data validation here if needed
+
+        // Insert the new plan into the database
+        const planInsertQuery = {
+            text: 'INSERT INTO plans (project_id, name, price, stripe_lookup_key) VALUES ($1, $2, $3, $4) RETURNING id',
+            values: [project_id, name, price, stripeLookupKey],
+        };
+
+        const { rows } = await pool.query(planInsertQuery);
+        const planId = rows[0].id;
+
+        // Insert plan benefits if provided
+        if (benefits && benefits.length > 0) {
+            for (const benefit of benefits) {
+                const benefitInsertQuery = {
+                    text: 'INSERT INTO plan_benefits (plan_id, benefit) VALUES ($1, $2)',
+                    values: [planId, benefit],
+                };
+                await pool.query(benefitInsertQuery);
+            }
         }
+
         res.status(201).json({ message: 'Plan created successfully' });
-        }
-        }
-    );
+    } catch (error) {
+        console.error('Error creating plan:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
 };
+
 
 const updatePlan = async (req, res) => {
     const planId = req.params.planId;

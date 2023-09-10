@@ -3,6 +3,7 @@ const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 const YOUR_DOMAIN = 'http://localhost:3000';
 
 const createCheckoutSession = async (req, res) => {
+    console.log('lookup_keys', req.body.lookup_key);
     try{
         if (!req.body.lookup_key) {
             return res.status(400).json({ error: 'Invalid lookup_key' });

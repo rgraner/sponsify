@@ -64,7 +64,7 @@ function Plans({ plans, fetchPlansByProjectId, projectId }) {
                     {/* <div className="plan-card-footer" onClick={() => handleAddToCart(plan.plan_id)}> */}
                         <form action="/api/payment/create-checkout-session" method="POST">
                             {/* Add a hidden field with the lookup_key of your Price */}
-                            <input type="hidden" name="lookup_key" value="gold" />
+                            <input type="hidden" name="lookup_key" value={plan.stripe_lookup_key} />
                             <button className="button" id="checkout-and-portal-button" type="submit">
                                 Sponsor now
                             </button>
