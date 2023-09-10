@@ -148,26 +148,26 @@ const updatePlan = async (req, res) => {
   }
 };
 
-const deletePlan = async (req, res) => {
-    const planId = req.params.planId;
+// const deletePlan = async (req, res) => {
+//     const planId = req.params.planId;
 
-    try {
-        // Perform the delete operation using the planId
-        const result = await pool.query(
-            'DELETE FROM plans WHERE id = $1', 
-            [planId]
-        );
+//     try {
+//         // Perform the delete operation using the planId
+//         const result = await pool.query(
+//             'DELETE FROM plans WHERE id = $1', 
+//             [planId]
+//         );
 
-        if(result.rowCount === 0) {
-            return res.status(404).json({ message: 'Plan not found' });
-        }
-        res.status(200).json({ message: 'Plan deleted successfully' })
-    } catch (error) {
-        console.error('Error deleting plan:', error);
-        res.status(500).json({ message: 'Internal server error' });
-    }
+//         if(result.rowCount === 0) {
+//             return res.status(404).json({ message: 'Plan not found' });
+//         }
+//         res.status(200).json({ message: 'Plan deleted successfully' })
+//     } catch (error) {
+//         console.error('Error deleting plan:', error);
+//         res.status(500).json({ message: 'Internal server error' });
+//     }
 
-};
+// };
 
 const deletePlanBenefitById = async (req, res) => {
     const benefitId = req.params.benefitId;
@@ -192,7 +192,7 @@ module.exports = {
     getPlansByProjectId,
     createPlan,
     updatePlan,
-    deletePlan,
+    // deletePlan,
     deletePlanBenefitById
 };
 
