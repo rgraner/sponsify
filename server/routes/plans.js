@@ -6,6 +6,7 @@ const dbPlans = require('../controllers/plans');
 router.get('/project/:projectId', dbPlans.getPlansByProjectId);
 router.post('/', dbPlans.createPlan);
 router.put('/:planId', dbPlans.updatePlan);
+router.put('/:planId/archive', dbPlans.archivePlan);
 // router.delete('/:planId', dbPlans.deletePlan);
 router.delete('/plan_benefit/:benefitId', dbPlans.deletePlanBenefitById);
 

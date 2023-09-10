@@ -148,6 +148,23 @@ const updatePlan = async (req, res) => {
   }
 };
 
+const archivePlan = async (req, res) => {
+    const planId = req.parmas.planId;
+
+    try {
+        // Update the plan's is_archived column to true
+        await pool.query(
+          'UPDATE plans SET is_archived = true WHERE id = $1',
+          [planId]
+        );
+        res.status(200).json({ message: 'Plan archived successfully' });
+    } catch (error) {
+        console.error('Error archiving the plan:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+
+}
+
 // const deletePlan = async (req, res) => {
 //     const planId = req.params.planId;
 
@@ -192,6 +209,7 @@ module.exports = {
     getPlansByProjectId,
     createPlan,
     updatePlan,
+    archivePlan,
     // deletePlan,
     deletePlanBenefitById
 };
