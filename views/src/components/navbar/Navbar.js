@@ -20,15 +20,15 @@ function Navbar() {
         <div className="navbar-items">
           <Link to="/projects">Projects</Link>
           <Link to="/sponsors">Sponsors</Link>
+          <span>|</span>
           {isLoggedIn ? (
-            <div>
+            <div className="mr-16">
               <span>Hello, {user.username}</span>
               <Link to="/logout">Logout</Link>
             </div>
           ) : (
             <Link to="/login">Login</Link>
           )}
-          <Link to="/basket">Basket(0)</Link>
         </div>
       </div>
     </nav>
