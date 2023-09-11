@@ -74,7 +74,7 @@ function Plans({ plans, fetchPlansByProjectId, projectId }) {
                                 </form>
                             </div>
                         </div>
-                    ) : ('')}
+                    ) : null}
                 </div>
             ))}
         </div>

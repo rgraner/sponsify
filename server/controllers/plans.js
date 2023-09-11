@@ -1,6 +1,7 @@
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 const pool = require('../models/pool');
 const randomNumber = require("../utils/randomNumber");
+const capitalizeFirstLetter = require("../utils/capitalizeFirstLetter");
 
 
 // Get plans for a specific project_id
@@ -27,25 +28,31 @@ const getPlansByProjectId = async (req, res) => {
         const result = [];
 
         plansData.rows.forEach((row) => {
-            const existingPlan = result.find((plan) => plan.name === row.name);
-            if (!existingPlan) {
-                result.push({
-                    plan_id: row.id,
+            const planId = row.id;
+        
+            if (!result[planId]) {
+                result[planId] = {
+                    plan_id: planId,
                     project_id: row.project_id,
                     price: parseFloat(row.price),
                     name: row.name,
                     benefits: [],
                     stripe_lookup_key: row.stripe_lookup_key,
                     created_at: row.created_at,
-                    updated_at: row.updated_at
-                });
+                    updated_at: row.updated_at,
+                    is_archived: row.is_archived,
+                };
             }
-            result[result.length - 1].benefits.push({
+        
+            result[planId].benefits.push({
                 benefit_id: row.benefit_id,
-                description: row.benefit
+                description: row.benefit,
             });
         });
-      res.status(200).json(result);
+        
+        const uniquePlans = Object.values(result);
+        
+        res.status(200).json(uniquePlans);
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Internal server error' });
@@ -58,8 +65,18 @@ const createPlan = async (req, res) => {
 
     const stripeLookupKey = `project-${project_id}-${name.toLowerCase().replace(/ /g, '-')}-${randomNumber(5)}`;
 
+
+    const projectName = await pool.query(
+        'SELECT DISTINCT projects.name FROM projects JOIN plans ON projects.id = plans.project_id WHERE projects.id = $1;', [project_id]  
+    )
+    if (projectName.rows.length === 0) {
+        return res.status(404).json({ message: 'Product not found' });
+    };
+
+    const stripeProductName = `${capitalizeFirstLetter(projectName.rows[0].name)} ${capitalizeFirstLetter(name)}`;
+
     const stripeProduct = await stripe.products.create({
-        name: name,
+        name: stripeProductName,
     });
 
     await stripe.prices.create({
@@ -76,7 +93,7 @@ const createPlan = async (req, res) => {
         // Insert the new plan into the database
         const planInsertQuery = {
             text: 'INSERT INTO plans (project_id, name, price, stripe_lookup_key) VALUES ($1, $2, $3, $4) RETURNING id',
-            values: [project_id, name, price, stripeLookupKey],
+            values: [project_id, capitalizeFirstLetter(name), price, stripeLookupKey],
         };
 
         const { rows } = await pool.query(planInsertQuery);
