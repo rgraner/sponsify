@@ -106,12 +106,17 @@ const getSponsorsByProjectId = async (req, res) => {
 };
 
 // Create sponsor
-const createSponsor = (req, res) => {
+const createSponsor = async (req, res) => {
     const { name, description, username, email, logo } = req.body;
 
+    const stripeCustomer = await stripe.customers.create({
+      email: email,
+      description: description
+    });
+
     pool.query(
-        'INSERT INTO sponsors (name, description, username, email, logo) VALUES ($1, $2, $3, $4, $5) RETURNING id',
-        [name, description, username, email, logo],
+        'INSERT INTO sponsors (name, description, username, email, logo, stripe_customer_id) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id',
+        [name, description, username, email, logo, stripeCustomer.id],
         (error, results) => {
             if (error) {
                 console.error('Error creating sponsor:', error);
