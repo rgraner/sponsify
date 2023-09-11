@@ -46,7 +46,7 @@ function Plans({ plans, fetchPlansByProjectId, projectId }) {
     //     };
 
     return (
-        <div className="card">
+        <div className="flex-space-between">
             {plans
                 .filter(plan => !plan.is_archived) // Filter out archived plans
                 .map((plan) => (

@@ -22,7 +22,7 @@ function Navbar() {
           <Link to="/sponsors">Sponsors</Link>
           <span>|</span>
           {isLoggedIn ? (
-            <div className="mr-16">
+            <div className="span">
               <span>Hello, {user.username}</span>
               <Link to="/logout">Logout</Link>
             </div>

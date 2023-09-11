@@ -7,6 +7,7 @@ import Projects from './components/projects/Projects';
 import ProjectPage from './components/projects/ProjectPage';
 import Sponsors from './components/sponsors/Sponsors';
 import SponsorPage from './components/sponsors/SponsorPage';
+import PreRegistration from './components/auth/PreRegistration';
 import SponsorRegistration from './components/auth/SponsorRegistration';
 import ProjectRegistration from './components/auth/ProjectRegistration';
 import Login from './components/auth/Login';
@@ -34,6 +35,7 @@ function App() {
         <Route path="/projects/:projectId" element={<ProjectPage />} />
         <Route exact path="/sponsors" element={<Sponsors />} />
         <Route path="/sponsors/:sponsorId" element={<SponsorPage />} />
+        <Route path="/pre-registration" element={<PreRegistration />} />
         <Route path="/sponsor-registration" element={<SponsorRegistration />} />
         <Route path="/project-registration" element={<ProjectRegistration />} />
         <Route path="/login" element={<Login />} />

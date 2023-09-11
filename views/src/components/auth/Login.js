@@ -71,9 +71,9 @@ const Login = () => {
 
   return (
     <div className="container">
-      <h2>Login</h2>
+      <h2 class="section-title">Login</h2>
       <form onSubmit={handleSubmit}>
-        <div>
+        <div className="form-group">
           <label htmlFor="email">Email</label>
           <input
             type="email"
@@ -85,7 +85,7 @@ const Login = () => {
             required
           />
         </div>
-        <div>
+        <div className="form-group">
           <label htmlFor="password">Password</label>
           <input
             type="password"
@@ -97,12 +97,10 @@ const Login = () => {
             required
           />
         </div>
-        <div>
-          <button type="submit">Login</button>
-        </div>
+          <button className="button" type="submit">Login</button>
       </form>
       <p>
-        Don't have an account? <Link to="/register">Register</Link>
+        Don't have an account? <Link to="/pre-registration">Register</Link>
       </p>
     </div>
   );

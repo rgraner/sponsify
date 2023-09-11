@@ -88,14 +88,14 @@ const SponsorRegistration = ({
         </div>
       ) : (
       <div>
-        <h2>Sponsor Registration</h2>
+        <h2 class="section-title">Sponsor Registration</h2>
 
         {registrationState.isLoading && <p>Registering...</p>}
         
         {registrationState.error && <p>{registrationState.error}</p>}
 
           <form onSubmit={handleSubmit}>
-            <div>
+            <div className="form-group">
               <label htmlFor="username">Username</label>
               <input
                 type="text"
@@ -107,7 +107,7 @@ const SponsorRegistration = ({
                 required
               />
             </div>
-            <div>
+            <div className="form-group">
               <label htmlFor="email">Email</label>
               <input
                 type="email"
@@ -119,7 +119,7 @@ const SponsorRegistration = ({
                 required
               />
             </div>
-            <div>
+            <div className="form-group">
               <label htmlFor="password">Password</label>
               <input
                 type="password"
@@ -131,7 +131,7 @@ const SponsorRegistration = ({
                 required
               />
             </div>
-            <div>
+            <div className="form-group">
               <label htmlFor="confirmPassword">Confirm Password</label>
               <input
                 type="password"
