@@ -15,6 +15,7 @@ const createCheckoutSession = async (req, res) => {
           });
           const session = await stripe.checkout.sessions.create({
             billing_address_collection: 'auto',
+            customer: 'cus_OcjqfTwWpm6wMr',
             line_items: [
               {
                 price: prices.data[0].id,

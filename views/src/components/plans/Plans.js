@@ -50,36 +50,53 @@ function Plans({ plans, fetchPlansByProjectId, projectId }) {
         return <div className="container">Sponsorship plans will be displayed here...</div>; // You can display a loading indicator here
     }
 
+    const userData = JSON.parse(localStorage.getItem('userData'));
+
     return (
-        <div className="flex-space-between">
+        <div className="card">
             {plans
-                .filter(plan => !plan.is_archived) // Filter out archived plans
-                .map((plan) => (
-                    <div className="plan-card" key={plan.plan_id}>
-                        
-                        <div className="plan-card-header">
-                            <h3>{plan.name}</h3>
-                            <p>{plan.price === 0.00 ? 'Free' : `€${plan.price}/Month`}</p>
+                .filter((plan) => !plan.is_archived) // Filter out archived plans
+                .map((plan) => {
+                    let content;
+
+                    if (userData) {
+                        if (userData.user_type === 'sponsor') {
+                            content = (
+                                <form action="/api/payment/create-checkout-session" method="POST">
+                                    {/* Add a hidden field with the lookup_key of your Price */}
+                                    <input type="hidden" name="lookup_key" value={plan.stripe_lookup_key} />
+                                    <button className="button" id="checkout-and-portal-button" type="submit">
+                                        Sponsor now
+                                    </button>
+                                </form>
+                            );
+                        } else {
+                            content = <p>Please login as a sponsor to subscribe</p>;
+                        }
+                    } else {
+                        content = <p>Please login as a sponsor to subscribe</p>;
+                    }
+
+                    return (
+                        <div className="plan-card" key={plan.plan_id}>  
+                            <div className="plan-card-header">
+                                <h3>{plan.name}</h3>
+                                <p>{plan.price === 0.00 ? 'Free' : `€${plan.price}/Month`}</p>
+                            </div>
+                            <div className="plan-card-body">
+                                <ul>
+                                {plan.benefits.map((benefit) => (
+                                    <li key={benefit.benefit_id}>{benefit.description}</li>
+                                ))}
+                                </ul>
+                            </div>
+                            <div className="plan-card-footer">
+                                {content}
+                                {/* <div className="plan-card-footer" onClick={() => handleAddToCart(plan.plan_id)}> */}
+                            </div>
                         </div>
-                        <div className="plan-card-body">
-                            <ul>
-                            {plan.benefits.map((benefit) => (
-                                <li key={benefit.benefit_id}>{benefit.description}</li>
-                            ))}
-                            </ul>
-                        </div>
-                        <div className="plan-card-footer">
-                        {/* <div className="plan-card-footer" onClick={() => handleAddToCart(plan.plan_id)}> */}
-                            <form action="/api/payment/create-checkout-session" method="POST">
-                                {/* Add a hidden field with the lookup_key of your Price */}
-                                <input type="hidden" name="lookup_key" value={plan.stripe_lookup_key} />
-                                <button className="button" id="checkout-and-portal-button" type="submit">
-                                    Sponsor now
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-            ))}
+                    );   
+                })}
         </div>
     )
 };

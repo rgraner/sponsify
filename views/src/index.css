@@ -81,13 +81,6 @@ section {
   justify-content: space-around;
 }
 
-.flex-space-between {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: first baseline;
-  justify-content: space-between;
-}
-
 .form-group {
   margin-bottom: 20px;
 }
