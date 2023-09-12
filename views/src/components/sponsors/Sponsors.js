@@ -16,7 +16,13 @@ function Sponsors({ sponsors, fetchSponsors }) {
                     <li key={sponsor.id}>
                         <div className="companies-logo">
                             <Link to={`/sponsors/${sponsor.id}`}>
-                                <img src={`/images/companies-logo/${sponsor.logo}`} alt={sponsor.name}></img>
+                            <img
+                                src={`/images/companies-logo/${sponsor.logo}`}
+                                alt={sponsor.name}
+                                onError={(e) => {
+                                    e.target.src = '/images/companies-logo/missing-image.svg';
+                                }}
+                            />
                                 <h3>{sponsor.name}</h3>
                             </Link>
                         </div>

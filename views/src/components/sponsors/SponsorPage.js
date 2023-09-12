@@ -16,13 +16,19 @@ function SponsorPage({ sponsor, fetchSponsor, projectsBySponsor, fetchProjectsBy
 
     // Check if projectsBySponsor is empty before accessing its properties
     if (projectsBySponsor.length === 0 || projectsBySponsor.length === undefined ) {
-        return <div className="container">Loading...</div>; // You can display a loading indicator here
+        return <div className="container">{sponsor.name} doesn't sponsor any project yet...</div>; // You can display a loading indicator here
     }
     
     return (
         <div className="container">
             <div className="page-title companies-logo">
-                <img src={`/images/companies-logo/${sponsor.logo}`} alt={sponsor.name} />
+                <img
+                    src={`/images/companies-logo/${sponsor.logo}`}
+                    alt={sponsor.name}
+                    onError={(e) => {
+                        e.target.src = '/images/companies-logo/missing-image.svg';
+                    }}
+                />
                 <h1>{sponsor.name}</h1>
             </div>
             <div className="section-title">
