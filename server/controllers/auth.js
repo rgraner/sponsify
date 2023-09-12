@@ -6,10 +6,10 @@ const jwt = require('jsonwebtoken');
 
 const sponsorRegistration = async (req, res) => {
     try {
-        const { username, email, password } = req.body;
+        const { name, description, logo, username, email, password } = req.body;
 
         // Validate input
-        if (!username || !email || !password) {
+        if (!name || !description || !logo || !username || !email || !password) {
             return res.status(400).json({ error: 'All fields are required' });
         }
 
@@ -44,6 +44,19 @@ const sponsorRegistration = async (req, res) => {
             VALUES ($1, $2, $3, $4) RETURNING id',
             [username, email, hashedPassword, 'sponsor']
         )
+
+        const userId = userResult.rows[0].id;
+        const stripeCustomer = await stripe.customers.create({
+            email: email,
+            description: description
+          });
+
+        // Insert sponsor data into the sponsors table
+        await pool.query(
+            'INSERT INTO sponsors (user_id, name, description, logo, stripe_customer_id)\
+            VALUES ($1, $2, $3, $4, $5)',
+            [userId, name, description, logo, stripeCustomer.id]
+        );
 
         // Commit the database transaction
         await pool.query('COMMIT');
