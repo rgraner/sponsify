@@ -45,6 +45,11 @@ function Plans({ plans, fetchPlansByProjectId, projectId }) {
     //         }
     //     };
 
+    // Check if plans is empty before accessing its properties
+    if (plans.length === 0 || plans.length === undefined ) {
+        return <div className="container">Sponsorship plans will be displayed here...</div>; // You can display a loading indicator here
+    }
+
     return (
         <div className="flex-space-between">
             {plans
