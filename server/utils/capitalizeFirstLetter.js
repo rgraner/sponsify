@@ -9,5 +9,3 @@ function capitalizeFirstLetter(string) {
 }
 
 module.exports = capitalizeFirstLetter;
-
-console.log(capitalizeFirstLetter('brONzE PLaN'));

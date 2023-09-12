@@ -14,6 +14,8 @@ const SponsorRegistration = ({
   registerProjectFailure,
 }) => {
   const [formData, setFormData] = useState({
+    name: '',
+    description: '',
     username: '',
     email: '',
     password: '',
@@ -39,7 +41,7 @@ const SponsorRegistration = ({
     registerProjectRequest();
 
     try {
-      const response = await fetch('/api/auth/register/project', {
+      const response = await fetch('/api/projects', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -51,6 +53,8 @@ const SponsorRegistration = ({
         registerProjectSuccess();
         // Reset the form fields
         setFormData({
+          name: '',
+          description: '',
           username: '',
           email: '',
           password: '',
@@ -88,13 +92,37 @@ const SponsorRegistration = ({
         </div>
       ) : (
       <div>
-        <h2 class="section-title">Project Registration</h2>
+        <h2 className="section-title">Project Registration</h2>
 
         {registrationState.isLoading && <p>Registering...</p>}
         
         {registrationState.error && <p>{registrationState.error}</p>}
 
           <form onSubmit={handleSubmit}>
+            <div className="form-group">
+              <label htmlFor="name">Organization Name</label>
+              <input
+                type="text"
+                id="name"
+                name="name"
+                autoComplete="name"
+                value={formData.name}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="description">Description</label>
+              <textarea
+                id="description"
+                name="description"
+                autoComplete="description"
+                value={formData.description}
+                onChange={handleChange}
+                required
+                rows="4"
+              />
+            </div>
             <div className="form-group">
               <label htmlFor="username">Username</label>
               <input

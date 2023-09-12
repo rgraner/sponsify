@@ -166,7 +166,7 @@ const updatePlan = async (req, res) => {
 };
 
 const archivePlan = async (req, res) => {
-    const planId = req.parmas.planId;
+    const planId = req.params.planId;
 
     try {
         // Update the plan's is_archived column to true
