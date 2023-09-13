@@ -1,13 +1,22 @@
+const pool = require('../models/pool')
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
 const YOUR_DOMAIN = 'http://localhost:3000';
 
 const createCheckoutSession = async (req, res) => {
-    console.log('lookup_keys', req.body.lookup_key);
+    const authenticatedUserId = req.user.id; // From authMiddleware added to the route
+
     try{
         if (!req.body.lookup_key) {
             return res.status(400).json({ error: 'Invalid lookup_key' });
         }
+
+        // Retrieve the Stripe customer ID
+        const queryResult = await pool.query(
+            'SELECT stripe_customer_id FROM sponsors WHERE user_id = $1',
+            [authenticatedUserId] 
+        );
+        const stripeCustomerId = queryResult.rows[0].stripe_customer_id;
 
         const prices = await stripe.prices.list({
             lookup_keys: [req.body.lookup_key],
@@ -15,7 +24,7 @@ const createCheckoutSession = async (req, res) => {
           });
           const session = await stripe.checkout.sessions.create({
             billing_address_collection: 'auto',
-            customer: 'cus_OcjqfTwWpm6wMr',
+            customer: stripeCustomerId,
             line_items: [
               {
                 price: prices.data[0].id,
