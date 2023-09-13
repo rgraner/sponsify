@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { fetchPlansByProjectId } from '../../redux/reducers/plansReducer';
 import './Plans.css'
@@ -45,6 +46,10 @@ function Plans({ plans, fetchPlansByProjectId, projectId }) {
     //         }
     //     };
 
+    const handleButtonClick = () => {
+        window.alert('To order a sponsorship plan, please log in as a sponsor user');
+      };
+
     // Check if plans is empty before accessing its properties
     if (plans.length === 0 || plans.length === undefined ) {
         return <div className="container">Sponsorship plans will be displayed here...</div>; // You can display a loading indicator here
@@ -65,16 +70,18 @@ function Plans({ plans, fetchPlansByProjectId, projectId }) {
                                 <form action="/api/payment/create-checkout-session" method="POST">
                                     {/* Add a hidden field with the lookup_key of your Price */}
                                     <input type="hidden" name="lookup_key" value={plan.stripe_lookup_key} />
-                                    <button className="button" id="checkout-and-portal-button" type="submit">
+                                    <button id="checkout-and-portal-button" type="submit">
                                         Sponsor now
                                     </button>
                                 </form>
                             );
                         } else {
-                            content = <p>Please login as a sponsor to subscribe</p>;
+                            // content = <p>Please login as a sponsor to subscribe</p>;
+                            content = <div className="button-style" onClick={handleButtonClick}>Sponsor Now</div>
                         }
                     } else {
-                        content = <p>Please login as a sponsor to subscribe</p>;
+                        // content = <p>Please login as a sponsor to subscribe</p>;
+                        content = <Link to="/login" className="button-style">Sponsor Now</Link>
                     }
 
                     return (
@@ -91,7 +98,7 @@ function Plans({ plans, fetchPlansByProjectId, projectId }) {
                                 </ul>
                             </div>
                             <div className="plan-card-footer">
-                                {content}
+                                {content}   
                                 {/* <div className="plan-card-footer" onClick={() => handleAddToCart(plan.plan_id)}> */}
                             </div>
                         </div>
