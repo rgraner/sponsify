@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { loginSuccess } from '../../redux/actions/authenticationActions';
 
@@ -11,6 +11,7 @@ const Login = () => {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -34,8 +35,10 @@ const Login = () => {
         body: JSON.stringify(loginData),
       });
 
+      let responseData;
+
       if (response.status === 200) {
-        const responseData = await response.json();
+        responseData = await response.json();
         // Successful login, you can handle the success here
         console.log('Login successful');
 
@@ -45,14 +48,20 @@ const Login = () => {
         // Store in localStorage
         localStorage.setItem('isLoggedIn', 'true');
         localStorage.setItem('userData', JSON.stringify(responseData.user));
-        
 
-        // Determine the user type and redirect accordingly
-        if (responseData.user.user_type === 'sponsor') {
-          navigate('/sponsors');
+        const userId = responseData.user.id
+
+        // Redirect after successful login
+        const storedRedirectPath = localStorage.getItem('redirectPath');
+        if (storedRedirectPath) {
+          navigate(storedRedirectPath);
+          localStorage.removeItem(storedRedirectPath);
+        } else if (responseData.user.user_type === 'sponsor') {
+          navigate(`/sponsors/${userId}`);
         } else {
-          navigate('/projects');
+          navigate(`/projects/${userId}`);
         }
+        
       } else {
         // Handle login error
         console.error('Login failed');

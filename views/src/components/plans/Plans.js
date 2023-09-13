@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { fetchPlansByProjectId } from '../../redux/reducers/plansReducer';
 import './Plans.css'
@@ -46,9 +46,20 @@ function Plans({ plans, fetchPlansByProjectId, projectId }) {
     //         }
     //     };
 
+    const navigate = useNavigate();
+    const location = useLocation();
+
     const handleButtonClick = () => {
         window.alert('To order a sponsorship plan, please log in as a sponsor user');
       };
+
+    const handleSponsorNowButton = () => {
+        // Store the current location in local storage
+        localStorage.setItem('redirectPath', location.pathname);
+        
+        // Redirect to the login page
+        navigate('/login');
+    };
 
     // Check if plans is empty before accessing its properties
     if (plans.length === 0 || plans.length === undefined ) {
@@ -81,7 +92,7 @@ function Plans({ plans, fetchPlansByProjectId, projectId }) {
                         }
                     } else {
                         // content = <p>Please login as a sponsor to subscribe</p>;
-                        content = <Link to="/login" className="button-style">Sponsor Now</Link>
+                        content = <div className="button-style" onClick={handleSponsorNowButton}>Sponsor Now</div>
                     }
 
                     return (

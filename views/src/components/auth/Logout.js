@@ -20,6 +20,7 @@ const Logout = () => {
                 // Clear local storage
                 localStorage.removeItem('isLoggedIn');
                 localStorage.removeItem('userData');
+                localStorage.removeItem('redirectPath');
                 navigate('/projects');
             } else {
             // handle error response
