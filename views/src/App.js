@@ -12,7 +12,6 @@ import SponsorRegistration from './components/auth/SponsorRegistration';
 import ProjectRegistration from './components/auth/ProjectRegistration';
 import Login from './components/auth/Login';
 import Logout from './components/auth/Logout';
-import Cart from './components/cart/Cart';
 import { loginSuccess } from './redux/actions/authenticationActions';
 import PaymentFlow from './components/payment/PaymentFlow';
 
@@ -40,7 +39,6 @@ function App() {
         <Route path="/project-registration" element={<ProjectRegistration />} />
         <Route path="/login" element={<Login />} />
         <Route path="/logout" element={<Logout />} />
-        <Route path="/cart" element={<Cart />} />
         <Route path="/*" element={<PaymentFlow />} />
       </Routes>
       <Footer />

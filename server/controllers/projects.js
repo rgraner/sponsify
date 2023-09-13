@@ -106,24 +106,6 @@ const getProjectsBysponsorId = async (req, res) => {
     }
 };
 
-// // Create project
-// const createProject = (req, res) => {
-//     const { name, description, username, email, logo } = req.body;
-
-//     pool.query(
-//         'INSERT INTO projects (name, description, username, email, logo) VALUES ($1, $2, $3, $4, $5) RETURNING id',
-//         [name, description, username, email, logo],
-//         (error, results) => {
-//             if (error) {
-//                 console.error('Error creating project:', error);
-//                 res.status(500).json({ error: 'Error creating project' });
-//                 return;
-//             }
-//             res.status(201).json({ message: `project added with ID: ${results.rows[0].id}` });
-//         }
-//     );
-// };
-
 const createProject = async (req, res) => {
   try {
     const { name, description, username, email, password } = req.body;

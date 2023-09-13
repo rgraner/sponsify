@@ -107,29 +107,6 @@ const getSponsorsByProjectId = async (req, res) => {
     }
 };
 
-// // Create sponsor
-// const createSponsor = async (req, res) => {
-//     const { name, description, username, email, logo } = req.body;
-
-//     const stripeCustomer = await stripe.customers.create({
-//       email: email,
-//       description: description
-//     });
-
-//     pool.query(
-//         'INSERT INTO sponsors (name, description, username, email, logo, stripe_customer_id) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id',
-//         [name, description, username, email, logo, stripeCustomer.id],
-//         (error, results) => {
-//             if (error) {
-//                 console.error('Error creating sponsor:', error);
-//                 res.status(500).json({ error: 'Error creating sponsor' });
-//                 return;
-//             }
-//             res.status(201).json({ message: `Sponsor added with ID: ${results.rows[0].id}` });
-//         }
-//     );
-// };
-
 const createSponsor = async (req, res) => {
   try {
       const { name, description, username, email, password } = req.body;

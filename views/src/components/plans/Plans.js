@@ -6,48 +6,15 @@ import './Plans.css'
 
 
 function Plans({ plans, fetchPlansByProjectId, projectId }) {
+
+    const navigate = useNavigate();
+    const location = useLocation();
+
     useEffect(() => {
         if (projectId) {
             fetchPlansByProjectId(projectId);
         }
     }, [fetchPlansByProjectId, projectId]);
-
-    // const handleAddToCart = async (planId) => {
-    //     try {
-    //         const response = await fetch('/api/auth/check');
-    //         if (!response.ok) {
-    //             throw new Error(response.statusText);
-    //         }
-    //         const user = await response.json();
-    //         const userId = user.id;
-            
-    //         // Make a POST request to add the plan to the cart
-    //         const response2 = await fetch(`/api/cart/user/${userId}`, {
-    //             method: 'POST',
-    //             headers: {
-    //             'Content-Type': 'application/json',
-    //             },
-    //             body: JSON.stringify({ plan_id: planId }), // Send the plan ID in the request body
-    //         });
-    
-    //         if (response2.status === 201) {
-    //             // Handle success
-    //             console.log('Plan added to the cart successfully');
-    
-    //             // Optionally, dispatch an action to update your Redux store here
-    //             // dispatch(planAddedToCart(planId));
-    //         } else {
-    //             // Handle error
-    //             console.error('Failed to add plan to the cart');
-    //         }
-    //         } catch (error) {
-    //         // Handle network error
-    //         console.error('Network error:', error);
-    //         }
-    //     };
-
-    const navigate = useNavigate();
-    const location = useLocation();
 
     const handleButtonClick = () => {
         window.alert('To order a sponsorship plan, please log in as a sponsor user');
