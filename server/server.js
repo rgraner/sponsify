@@ -35,7 +35,6 @@ app.use(passport.initialize());
 app.use('/api/sponsors', sponsorsRoute);
 app.use('/api/projects', projectsRoute);
 app.use('/api/plans', plansRoute);
-app.use('/api/cart', cartRoute);
 app.use('/api/checkout', checkoutRoute);
 app.use('/api/auth', authRoute);
 app.use('/api/payment', paymentRoute);
