@@ -28,6 +28,49 @@ const getAllSponsors = (req, res) => {
 const getSponsorById = async ( req, res) => {
   const sponsorId = parseInt(req.params.sponsorId);
 
+  /////
+  // const sponsorsQuery = await pool.query(
+  //   'SELECT stripe_customer_id FROM sponsors WHERE id = $1',
+  //   [sponsorId]
+  // )
+
+  // // Retrieve Stripe subscription ID
+  // const stripeCustomerId = sponsorsQuery.rows[0].stripe_customer_id;
+  // const stripeSubscriptions = await stripe.subscriptions.list({
+  //   limit: 3,
+  //   customer: stripeCustomerId
+  // });
+  // const stripeSubscriptionId = stripeSubscriptions.data[0].id;
+
+  // // Retrieve  Stripe lookup key by subscription item
+  // const stripeSubscriptionItems = await stripe.subscriptionItems.list({
+  //   subscription: stripeSubscriptionId,
+  // });
+  // const stripeSubscriptionItemId = stripeSubscriptionItems.data[0].id;
+  // const subscriptionItem = await stripe.subscriptionItems.retrieve(
+  //   stripeSubscriptionItemId
+  // );
+  // const stripeLookupKey = subscriptionItem.price.lookup_key;
+
+  // // Retrive plan ID and project ID
+  // const plansQuery = await pool.query(
+  //   'SELECT id, project_id FROM plans WHERE stripe_lookup_key = $1',
+  //   [stripeLookupKey]
+  // )
+  // const planId = plansQuery.rows[0].id;
+  // const projecId = plansQuery.rows[0].project_id;
+
+  // await pool.query(
+  //   'INSERT INTO orders (sponsor_id, plan_id, stripe_subscription_id) VALUES($1, $2, $3)',
+  //   [sponsorId, planId, stripeSubscriptionId]
+  // );
+
+  // await pool.query(
+  //   'INSERT INTO sponsor_projects (sponsor_id, project_id) VALUES($1, $2)',
+  //   [sponsorId, projecId]
+  // );
+  /////
+
   try {
       const sponsor = await pool.query(
           'SELECT\

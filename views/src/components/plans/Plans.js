@@ -34,6 +34,7 @@ function Plans({ plans, fetchPlansByProjectId, projectId }) {
     }
 
     const userData = JSON.parse(localStorage.getItem('userData'));
+    const actionURL = `/api/payment/${userData.id}/create-checkout-session`;
 
     return (
         <div className="card">
@@ -45,7 +46,7 @@ function Plans({ plans, fetchPlansByProjectId, projectId }) {
                     if (userData) {
                         if (userData.user_type === 'sponsor') {
                             content = (
-                                <form action="/api/payment/create-checkout-session" method="POST">
+                                <form action={actionURL} method="POST">
                                     {/* Add a hidden field with the lookup_key of your Price */}
                                     <input type="hidden" name="lookup_key" value={plan.stripe_lookup_key} />
                                     <button id="checkout-and-portal-button" type="submit">

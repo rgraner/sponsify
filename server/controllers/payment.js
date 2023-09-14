@@ -4,7 +4,8 @@ const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 const YOUR_DOMAIN = 'http://localhost:3000';
 
 const createCheckoutSession = async (req, res) => {
-    const authenticatedUserId = req.user.id; // From authMiddleware added to the route
+    // const authenticatedUserId = req.user.id; // From authMiddleware added to the route
+    const { userId } = req.params;
 
     try{
         if (!req.body.lookup_key) {
@@ -14,7 +15,7 @@ const createCheckoutSession = async (req, res) => {
         // Retrieve the Stripe customer ID
         const queryResult = await pool.query(
             'SELECT stripe_customer_id FROM sponsors WHERE user_id = $1',
-            [authenticatedUserId] 
+            [userId] 
         );
         const stripeCustomerId = queryResult.rows[0].stripe_customer_id;
 
@@ -72,7 +73,39 @@ const createPortalSession = async (req, res) => {
     }
 }
 
+const fetchCheckout = async (baseURL) => {
+    // Extract the necessary information from the paymentIntent object
+  
+    try {
+      // Make the API request to trigger the checkout
+      const response = await fetch(`http://${baseURL}/api/checkout`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          // Include any necessary data for the checkout
+        }),
+      });
+  
+      if (response.ok) {
+        // Checkout call successful
+        console.log('Checkout call successful');
+        // Perform additional actions (e.g., display order summary, clear cart, etc.)
+      } else {
+        // Error handling for the call
+        console.log('Checkout call failed:', response.statusText);
+        // Handle the error accordingly
+      }
+    } catch (error) {
+      // Error handling for network or other unexpected errors
+      console.log('An error occurred during the checkout call:', error);
+      // Handle the error accordingly
+    }
+  };
+
 const webhook = async (req, res) => {
+
     let event = req.body;
     const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET;
     if (endpointSecret) {
@@ -121,6 +154,15 @@ const webhook = async (req, res) => {
         // Then define and call a method to handle the subscription update.
         // handleSubscriptionUpdated(subscription);
         break;
+    case 'payment_intent.succeeded':
+        subscription = event.data.object;
+        console.log('Subscription was successful!');
+        // console.log('subscription.metadata', subscription.metadata);
+        // const sponsorId = subscription.metadata.sponsorId;
+        // console.log('sponsorId', sponsorId);
+        // Trigger the checkout API here
+        await fetchCheckout(req.get('host'))
+        break;
     default:
         // Unexpected event type
         console.log(`Unhandled event type ${event.type}.`);
@@ -133,6 +175,7 @@ const webhook = async (req, res) => {
 module.exports = { 
     createCheckoutSession,
     createPortalSession,
+    fetchCheckout,
     webhook,
 };
 

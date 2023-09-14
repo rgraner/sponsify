@@ -13,7 +13,6 @@ const passport = require('./loaders/passport');
 const sponsorsRoute = require('./routes/sponsors');
 const projectsRoute = require('./routes/projects');
 const plansRoute = require('./routes/plans');
-const cartRoute = require('./routes/cart');
 const checkoutRoute = require('./routes/checkout');
 const authRoute = require('./routes/auth');
 const paymentRoute = require('./routes/payment');
