@@ -4,7 +4,6 @@ const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 const YOUR_DOMAIN = 'http://localhost:3000';
 
 const createCheckoutSession = async (req, res) => {
-    // const authenticatedUserId = req.user.id; // From authMiddleware added to the route
     const { userId } = req.params;
 
     try{
