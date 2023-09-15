@@ -1,20 +1,20 @@
 import React, { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { fetchPlansByProjectId } from '../../redux/reducers/plansReducer';
+import { fetchPlansByProject } from '../../redux/reducers/plansByProjectReducer';
 import './Plans.css'
 
 
-function Plans({ plans, fetchPlansByProjectId, projectId }) {
+function Plans({ plansByProject, fetchPlansByProject, projectId }) {
 
     const navigate = useNavigate();
     const location = useLocation();
 
     useEffect(() => {
         if (projectId) {
-            fetchPlansByProjectId(projectId);
+            fetchPlansByProject(projectId);
         }
-    }, [fetchPlansByProjectId, projectId]);
+    }, [fetchPlansByProject, projectId]);
 
     const handleButtonClick = () => {
         window.alert('To order a sponsorship plan, please log in as a sponsor user');
@@ -29,7 +29,7 @@ function Plans({ plans, fetchPlansByProjectId, projectId }) {
     };
 
     // Check if plans is empty before accessing its properties
-    if (plans.length === 0 || plans.length === undefined ) {
+    if (plansByProject.length === 0 || plansByProject.length === undefined ) {
         return <div className="container">Sponsorship plans will be displayed here...</div>; // You can display a loading indicator here
     }
 
@@ -38,7 +38,7 @@ function Plans({ plans, fetchPlansByProjectId, projectId }) {
 
     return (
         <div className="card">
-            {plans
+            {plansByProject
                 .filter((plan) => !plan.is_archived) // Filter out archived plans
                 .map((plan) => {
                     let content;
@@ -88,11 +88,11 @@ function Plans({ plans, fetchPlansByProjectId, projectId }) {
 };
 
 const mapStateToProps = (state) => ({
-    plans: state.plans, 
+    plansByProject: state.plansByProject, 
 });
 
 const mapDispatchToProps = {
-    fetchPlansByProjectId,
+    fetchPlansByProject,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Plans); // Connect Plans component to Redux

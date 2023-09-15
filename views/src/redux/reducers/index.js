@@ -6,6 +6,8 @@ import sponsorsReducer from './sponsorsReducer';
 import sponsorReducer from './sponsorReducer';
 import sponsorsByProjectReducer from './sponsorsByProjectReducer';
 import plansReducer from './plansReducer';
+import plansByProjectReducer from './plansByProjectReducer';
+import plansBySponsorReducer from './plansBySponsorReducer';
 import registrationReducer from './registrationReducer';
 import authenticationReducer from './authenticationReducer';
 
@@ -17,6 +19,8 @@ const rootReducer = combineReducers({
   sponsor: sponsorReducer,
   sponsorsByProject: sponsorsByProjectReducer,
   plans: plansReducer,
+  plansByProject: plansByProjectReducer,
+  plansBySponsor: plansBySponsorReducer,
   registration: registrationReducer,
   authentication: authenticationReducer,
 });
