@@ -39,7 +39,7 @@ function App() {
         <Route path="/project-registration" element={<ProjectRegistration />} />
         <Route path="/login" element={<Login />} />
         <Route path="/logout" element={<Logout />} />
-        <Route path="/*" element={<PaymentFlow />} />
+        <Route path="/payment-flow" element={<PaymentFlow />} />
       </Routes>
       <Footer />
     </Router>

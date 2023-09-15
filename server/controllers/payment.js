@@ -34,8 +34,8 @@ const createCheckoutSession = async (req, res) => {
               },
             ],
             mode: 'subscription',
-            success_url: `${YOUR_DOMAIN}/?success=true&session_id={CHECKOUT_SESSION_ID}`,
-            cancel_url: `${YOUR_DOMAIN}?canceled=true`,
+            success_url: `${YOUR_DOMAIN}/payment-flow?success=true&session_id={CHECKOUT_SESSION_ID}`,
+            cancel_url: `${YOUR_DOMAIN}/payment-flow?canceled=true`,
           });
         
           res.redirect(303, session.url);

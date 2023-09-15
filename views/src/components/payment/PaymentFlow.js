@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react';
 import PaymentSuccess from './PaymentSuccess';
 
 const Message = ({ message }) => (
-    <section>
+    <div className='container'>
       <p>{message}</p>
-    </section>
+    </div>
   );
 
 export default function PaymentFlow() {
@@ -25,7 +25,7 @@ export default function PaymentFlow() {
     if (query.get('canceled')) {
       setSuccess(false);
       setMessage(
-        "Order canceled -- continue to shop around and checkout when you're ready."
+        "Subscription canceled -- continue visiting our web and checkout when you're ready."
       );
     }
   }, []); // Dependency array can be empty if this code should run once on component mount
