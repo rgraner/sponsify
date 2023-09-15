@@ -3,6 +3,7 @@ const router = express.Router();
 const dbPlans = require('../controllers/plans');
 
 
+router.get('/', dbPlans.getAllPlans);
 router.get('/project/:projectId', dbPlans.getPlansByProjectId);
 router.post('/', dbPlans.createPlan);
 router.put('/:planId', dbPlans.updatePlan);
