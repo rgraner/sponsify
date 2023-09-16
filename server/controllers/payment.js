@@ -5,21 +5,38 @@ const YOUR_DOMAIN = 'http://localhost:3000';
 
 const createCheckoutSession = async (req, res) => {
     const { userId } = req.params;
+    const stripeLookupKey = req.body.lookup_key
 
     try{
-        if (!req.body.lookup_key) {
+        if (!stripeLookupKey) {
             return res.status(400).json({ error: 'Invalid lookup_key' });
         }
 
         // Retrieve the Stripe customer ID
-        const queryResult = await pool.query(
+        const sponsorsQuery = await pool.query(
             'SELECT stripe_customer_id FROM sponsors WHERE user_id = $1',
             [userId] 
         );
-        const stripeCustomerId = queryResult.rows[0].stripe_customer_id;
+        const stripeCustomerId = sponsorsQuery.rows[0].stripe_customer_id;
+
+        // Retrieve the plan name and plan ID
+        const plansQuery = await pool.query(
+          'SELECT name, id FROM plans WHERE stripe_lookup_key = $1',
+          [stripeLookupKey]
+        );
+        const plan = plansQuery.rows[0].name;
+        const planId = plansQuery.rows[0].id;
+
+        // Retrieve the project name
+        const projectsQuery = await pool.query(
+          'SELECT projects.name FROM plans\
+          INNER JOIN projects ON projects.id = plans.project_id WHERE plans.id = $1',
+          [planId]
+        );
+        const project = projectsQuery.rows[0].name;
 
         const prices = await stripe.prices.list({
-            lookup_keys: [req.body.lookup_key],
+            lookup_keys: [stripeLookupKey],
             expand: ['data.product'],
           });
           const session = await stripe.checkout.sessions.create({
@@ -34,7 +51,7 @@ const createCheckoutSession = async (req, res) => {
               },
             ],
             mode: 'subscription',
-            success_url: `${YOUR_DOMAIN}/payment-flow?success=true&session_id={CHECKOUT_SESSION_ID}`,
+            success_url: `${YOUR_DOMAIN}/payment-flow?success=true&session_id={CHECKOUT_SESSION_ID}&plan=${plan}&project=${project}`,
             cancel_url: `${YOUR_DOMAIN}/payment-flow?canceled=true`,
           });
         

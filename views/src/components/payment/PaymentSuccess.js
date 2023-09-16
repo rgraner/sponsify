@@ -1,12 +1,12 @@
 import React from 'react';
 
 
-const PaymentSuccess = ({ sessionId }) => {
+const PaymentSuccess = ({ sessionId, plan, project }) => {
     return (
-      <div className="container v-center">
+      <div className="container v-center">	
         <section>
           <div className="message">
-            <p>Subscription to starter plan successful!</p>
+            <p>Subscription to the <strong>{project}</strong> <strong>{plan}</strong> successful!</p>
           </div>
           <form action="/api/payment/create-portal-session" method="POST">
             <input
