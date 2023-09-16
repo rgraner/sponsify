@@ -34,21 +34,19 @@ function SponsorPage({ sponsor, fetchSponsor, projectsBySponsor, fetchProjectsBy
             <div className="section-title">
                 <h2>Projects we sponsor</h2>
             </div>
-            <ul className="items no-list">
-                {projectsBySponsor[0].projects.map((project) => (
-                    <li key={project.project_id}>
-                        <div className="companies-logo">
-                            <Link to={`/projects/${project.project_id}`}>
-                                <img src={`/images/companies-logo/${project.project_logo}`} alt={project.project_name}></img>
-                                <h3>{project.project_name}</h3>
-                            </Link>
-                        </div>
-                    </li>
-                ))}
-            </ul>
-
-            <div>z
-
+                <ul className="items no-list">
+                    {projectsBySponsor[0].projects.map((project) => (
+                        <li key={project.project_id}>
+                            <div className="companies-logo">
+                                <Link to={`/projects/${project.project_id}`}>
+                                    <img src={`/images/companies-logo/${project.project_logo}`} alt={project.project_name}></img>
+                                    <h3>{project.project_name}</h3>
+                                </Link>
+                            </div>
+                        </li>
+                    ))}
+                </ul>
+            <div>
             </div>
         </div>
     )
