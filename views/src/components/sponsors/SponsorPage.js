@@ -47,7 +47,7 @@ function SponsorPage({ sponsor, fetchSponsor, projectsBySponsor, fetchProjectsBy
                 ))}
             </ul>
 
-            <div>
+            <div>z
 
             </div>
         </div>
@@ -66,3 +66,4 @@ const mapStateToProps = (state) => ({
   };
   
   export default connect(mapStateToProps, mapDispatchToProps)(SponsorPage);
+  

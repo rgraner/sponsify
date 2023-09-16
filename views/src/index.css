@@ -28,10 +28,31 @@ ul {
   list-style-position: inside;
 }
 
+html {
+  height: 100%;
+}
+
 body {
-  padding-top: 120px;
+  /* padding-top: 120px; */
   font-family: 'Open Sans', sans-serif;
   color: var(--dark-color);
+  /* display: flex; */
+  /* flex-direction: column;
+  height: 100%; */
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* This ensures that #root takes at least 100% of the viewport height. */
+}
+
+main {
+  padding-top: 70px;
+  margin: auto 0;
+  display: flex;
+  align-items: center;
+  height: 100%;
 }
 
 .container {
@@ -44,6 +65,7 @@ body {
   display: flex;
   align-items: center;
   justify-content:space-between;
+  gap: 75px;
 }
 
 .no-list {
@@ -51,12 +73,13 @@ body {
 }
 
 .page-title {
+  margin-top: 50px;
   margin-bottom: 50px;
   text-align: center;
 }
 
 section {
-  margin-bottom: 75px;
+  margin-top: 75px;
 }
 
 .section-title {
@@ -68,6 +91,7 @@ section {
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-around;
+  gap: 75px;
 }
 
 .v-center {
@@ -153,6 +177,9 @@ a.button-style {
   display: block;
 }
 
-.message {
+.succesfull-payment-message {
   margin-bottom: 35px;
 }
+
+
+

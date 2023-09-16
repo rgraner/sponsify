@@ -1,10 +1,8 @@
 .navbar {
   display: flex;
   align-items: center;
-  /* justify-content: space-between; */
   width: 100%;
   background-color: white;
-  /* padding: 16px 0; */
   height: 70px;
   top: 0;
   border-bottom: 1px solid #ccc;
@@ -17,7 +15,6 @@
   width: 100px;
   height: auto; 
 } */
-
 
 .navbar-logo {
   font-weight: bold;
@@ -42,11 +39,13 @@
   color: rgb(39, 39, 39);
 }
 
-.span span {
-  margin-right: 16px;
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 16px;
 }
 
-.span a {
+.user-info a {
   text-decoration: none;
-  color: rgb(39, 39, 39);
+  color: var(--dark-color);
 }

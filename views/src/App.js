@@ -28,20 +28,22 @@ function App() {
   
   return (
     <Router>
-      <Navbar />
-      <Routes>
-        <Route exact path="/projects" element={<Projects />} />
-        <Route path="/projects/:projectId" element={<ProjectPage />} />
-        <Route exact path="/sponsors" element={<Sponsors />} />
-        <Route path="/sponsors/:sponsorId" element={<SponsorPage />} />
-        <Route path="/pre-registration" element={<PreRegistration />} />
-        <Route path="/sponsor-registration" element={<SponsorRegistration />} />
-        <Route path="/project-registration" element={<ProjectRegistration />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/logout" element={<Logout />} />
-        <Route path="/payment-flow" element={<PaymentFlow />} />
-      </Routes>
-      <Footer />
+			<Navbar />
+				<main>
+					<Routes>
+						<Route exact path="/projects" element={<Projects />} />
+						<Route path="/projects/:projectId" element={<ProjectPage />} />
+						<Route exact path="/sponsors" element={<Sponsors />} />
+						<Route path="/sponsors/:sponsorId" element={<SponsorPage />} />
+						<Route path="/pre-registration" element={<PreRegistration />} />
+						<Route path="/sponsor-registration" element={<SponsorRegistration />} />
+						<Route path="/project-registration" element={<ProjectRegistration />} />
+						<Route path="/login" element={<Login />} />
+						<Route path="/logout" element={<Logout />} />
+						<Route path="/payment-flow" element={<PaymentFlow />} />
+					</Routes>
+				</main>
+			<Footer />
     </Router>
   );
 }

@@ -5,7 +5,7 @@ const PaymentSuccess = ({ sessionId, plan, project }) => {
     return (
       <div className="container v-center">	
         <section>
-          <div className="message">
+          <div className="succesfull-payment-message">
             <p>Subscription to the <strong>{project}</strong> <strong>{plan}</strong> successful!</p>
           </div>
           <form action="/api/payment/create-portal-session" method="POST">
