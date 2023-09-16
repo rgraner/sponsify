@@ -18,7 +18,7 @@ function Navbar() {
           <div className="navbar-logo">Sponsify</div>
         </Link>
         <div className="navbar-items">
-          <Link to="/projects">Projects</Link>
+          <Link to="/">Projects</Link>
           <Link to="/sponsors">Sponsors</Link>
           <span>|</span>
           {isLoggedIn ? (

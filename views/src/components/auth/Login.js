@@ -59,7 +59,7 @@ const Login = () => {
         } else if (responseData.user.user_type === 'sponsor') {
           navigate(`/sponsors/${userId}`);
         } else {
-          navigate(`/projects/${userId}`);
+          navigate(`/${userId}`);
         }
         
       } else {

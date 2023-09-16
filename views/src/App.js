@@ -31,7 +31,7 @@ function App() {
 			<Navbar />
 				<main>
 					<Routes>
-						<Route exact path="/projects" element={<Projects />} />
+						<Route exact path="/" element={<Projects />} />
 						<Route path="/projects/:projectId" element={<ProjectPage />} />
 						<Route exact path="/sponsors" element={<Sponsors />} />
 						<Route path="/sponsors/:sponsorId" element={<SponsorPage />} />

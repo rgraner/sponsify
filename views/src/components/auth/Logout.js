@@ -21,7 +21,7 @@ const Logout = () => {
                 localStorage.removeItem('isLoggedIn');
                 localStorage.removeItem('userData');
                 localStorage.removeItem('redirectPath');
-                navigate('/projects');
+                navigate('/');
             } else {
             // handle error response
             }
