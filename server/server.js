@@ -7,6 +7,7 @@ const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const app = express();
 const port = process.env.PORT;
+const host = process.env.HOST;
 
 const passport = require('./loaders/passport');
 
@@ -40,6 +41,7 @@ app.use('/api/payment', paymentRoute);
 
 
 // Start the server
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
+app.listen(port, host, () => {
+  console.log(`Server running at http://${host}:${port}/`);
 });
+

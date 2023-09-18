@@ -1,0 +1,18 @@
+# Use an official PostgreSQL image as a parent image
+FROM postgres:latest
+
+# Define build arguments for the environment variables
+ARG DB_USER
+ARG DB_PASSWORD
+ARG DB_HOST
+ARG DB_NAME
+
+# Set environment variables using the build arguments
+ENV POSTGRES_USER=$DB_USER
+ENV POSTGRES_PASSWORD=$DB_PASSWORD
+ENV POSTGRES_HOST=$DB_HOST
+ENV POSTGRES_DB=$DB_NAME
+
+# Expose the default PostgreSQL port
+EXPOSE 5432
+
