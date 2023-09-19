@@ -1,7 +1,7 @@
 const pool = require('../models/pool')
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
-const YOUR_DOMAIN = 'http://localhost:3000';
+const YOUR_DOMAIN = 'http://0.0.0.0:3000';
 
 const createCheckoutSession = async (req, res) => {
     const { userId } = req.params;
@@ -89,12 +89,12 @@ const createPortalSession = async (req, res) => {
     }
 }
 
-const fetchCheckout = async (baseURL) => {
+const fetchCheckout = async () => {
     // Extract the necessary information from the paymentIntent object
   
     try {
       // Make the API request to trigger the checkout
-      const response = await fetch(`http://${baseURL}/api/checkout`, {
+      const response = await fetch(`http://api/checkout`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

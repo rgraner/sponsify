@@ -11,7 +11,7 @@ const fetchSponsorSuccess = (sponsor) => ({
 export const fetchSponsor = (sponsorId) => {
   return async (dispatch) => {
     try {
-      const response = await fetch(`http://localhost:8000/api/sponsors/${sponsorId}`);
+      const response = await fetch(`/api/sponsors/${sponsorId}`);
       const sponsor = await response.json();
       dispatch(fetchSponsorSuccess(sponsor));
     } catch (error) {

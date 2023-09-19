@@ -11,7 +11,7 @@ const fetchProjectSuccess = (project) => ({
 export const fetchProject = (projectId) => {
   return async (dispatch) => {
     try {
-      const response = await fetch(`http://localhost:8000/api/projects/${projectId}`);
+      const response = await fetch(`/api/projects/${projectId}`);
       const project = await response.json();
       dispatch(fetchProjectSuccess(project));
     } catch (error) {

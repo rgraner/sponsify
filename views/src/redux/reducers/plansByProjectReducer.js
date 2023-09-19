@@ -11,7 +11,7 @@ const fetchPlansByProjectSuccess = (plans) => ({
 export const fetchPlansByProject = (projectId) => {
   return async (dispatch) => {
     try {
-      const response = await fetch(`http://localhost:8000/api/plans/project/${projectId}`)
+      const response = await fetch(`/api/plans/project/${projectId}`)
       const plans = await response.json();
       dispatch(fetchPlansByProjectSuccess(plans));
     } catch (error) {

@@ -11,7 +11,7 @@ const fetchPlansSuccess = (plans) => ({
 export const fetchPlans = () => {
   return async (dispatch) => {
     try {
-      const response = await fetch('http://localhost:8000/api/plans');
+      const response = await fetch('/api/plans');
       const plans = await response.json();
       dispatch(fetchPlansSuccess(plans));
     } catch (error) {
