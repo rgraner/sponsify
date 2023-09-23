@@ -75,8 +75,6 @@ Once the project is set up, you can access it by opening a web browser and navig
 - Interaction: A platform for communication between sponsors and projects.
 
 ## License
-This project is licensed under the [MIT License](https://opensource.org/license/mit)
-**Free Software, Hell Yeah!**
 
 ## Credits
 This project is part of the completion work for the Codecademy Full-Stack Engineer Course.
