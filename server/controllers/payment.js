@@ -89,12 +89,12 @@ const createPortalSession = async (req, res) => {
     }
 }
 
-const fetchCheckout = async () => {
+const fetchCheckout = async (baseURL) => {
     // Extract the necessary information from the paymentIntent object
   
     try {
       // Make the API request to trigger the checkout
-      const response = await fetch(`http://api/checkout`, {
+      const response = await fetch(`http://${baseURL}/api/checkout`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
