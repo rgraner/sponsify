@@ -17,13 +17,20 @@ function Projects({ projects, fetchProjects }) {
                     <li key={project.id}>
                         <div className="companies-logo">
                             <Link to={`/projects/${project.id}`}>
-                            <img
-                                src={`/images/companies-logo/${project.logo}`}
-                                alt={project.name}
-                                onError={(e) => {
-                                    e.target.src = '/images/companies-logo/missing-image.svg';
-                                }}
-                            />
+                                {project.logo ? (
+                                    <img
+                                        src={`/images/companies-logo/${project.logo}`}
+                                        alt={project.name}
+                                        onError={(e) => {
+                                            e.target.src = '/images/companies-logo/missing-image.svg';
+                                        }}
+                                    />
+                                ) : (
+                                    <img
+                                        src="/images/companies-logo/missing-image.svg"
+                                        alt="Missing Logo"
+                                    />
+                                )}
                                 <h3>{project.name}</h3>
                             </Link>
                         </div>

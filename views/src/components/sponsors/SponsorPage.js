@@ -22,13 +22,20 @@ function SponsorPage({ sponsor, fetchSponsor, projectsBySponsor, fetchProjectsBy
     return (
         <div className="container">
             <div className="page-title companies-logo">
-                <img
-                    src={`/images/companies-logo/${sponsor.logo}`}
-                    alt={sponsor.name}
-                    onError={(e) => {
-                        e.target.src = '/images/companies-logo/missing-image.svg';
-                    }}
-                />
+                {sponsor.logo ? (
+                    <img
+                        src={`/images/companies-logo/${sponsor.logo}`}
+                        alt={sponsor.name}
+                        onError={(e) => {
+                            e.target.src = '/images/companies-logo/missing-image.svg';
+                        }}
+                    />
+                ) : (
+                    <img
+                        src="/images/companies-logo/missing-image.svg"
+                        alt="Missing Logo"
+                    />
+                )}
                 <h1>{sponsor.name}</h1>
             </div>
             <div className="section-title">

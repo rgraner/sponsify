@@ -19,14 +19,21 @@ function ProjectPage({ project, fetchProject, sponsorsByProject, fetchSponsorsBy
   return (
     <div className="container">
       <div className="page-title companies-logo">
-        <img
-          src={`/images/companies-logo/${project.logo}`}
-          alt={project.name}
-          onError={(e) => {
-            e.target.src = '/images/companies-logo/missing-image.svg';
-          }}
-        />
-        <h1>{project.name}</h1>
+        {project.logo ? (
+          <img
+            src={`/images/companies-logo/${project.logo}`}
+            alt={project.name}
+            onError={(e) => {
+              e.target.src = '/images/companies-logo/missing-image.svg';
+            }}
+          />
+          ) : (
+            <img
+              src="/images/companies-logo/missing-image.svg"
+              alt="Missing Logo"
+            />
+          )}
+          <h1>{project.name}</h1>
       </div>
       
       <section>
@@ -48,13 +55,20 @@ function ProjectPage({ project, fetchProject, sponsorsByProject, fetchSponsorsBy
             <li key={sponsor.sponsor_id}>
               <div className="companies-logo">
                   <Link to={`/sponsors/${sponsor.sponsor_id}`}>
-                      <img
-                          src={`/images/companies-logo/${sponsor.sponsor_logo}`}
-                          alt={sponsor.sponsor_name}
-                          onError={(e) => {
-                              e.target.src = '/images/companies-logo/missing-image.svg';
-                          }}
-                      />
+                    {sponsor.sponsor_logo ? (
+                        <img
+                            src={`/images/companies-logo/${sponsor.sponsor_logo}`}
+                            alt={sponsor.sponsor_name}
+                            onError={(e) => {
+                                e.target.src = '/images/companies-logo/missing-image.svg';
+                            }}
+                        />
+                        ) : (
+                          <img
+                            src="/images/companies-logo/missing-image.svg"
+                            alt="Missing Logo"
+                          />
+                        )}
                       <h3>{sponsor.sponsor_name}</h3>
                   </Link>
               </div>
