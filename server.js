@@ -1,4 +1,5 @@
 require('dotenv').config();
+const path = require('path');
 
 const express = require('express');
 const session = require('express-session');
@@ -9,16 +10,17 @@ const app = express();
 const port = process.env.PORT;
 const host = process.env.HOST;
 
-const passport = require('./loaders/passport');
+const passport = require('./server/loaders/passport');
 
-const sponsorsRoute = require('./routes/sponsors');
-const projectsRoute = require('./routes/projects');
-const plansRoute = require('./routes/plans');
-const checkoutRoute = require('./routes/checkout');
-const authRoute = require('./routes/auth');
-const paymentRoute = require('./routes/payment');
+const sponsorsRoute = require('./server/routes/sponsors');
+const projectsRoute = require('./server/routes/projects');
+const plansRoute = require('./server/routes/plans');
+const checkoutRoute = require('./server/routes/checkout');
+const authRoute = require('./server/routes/auth');
+const paymentRoute = require('./server/routes/payment');
 
 // Middleware
+app.use(express.static(path.join(__dirname, 'views', 'build')));
 app.use(bodyParser.json({ verify: (req, res, buf) => { req.rawBody = buf; } }));
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(cors());
