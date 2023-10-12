@@ -13,6 +13,8 @@
 /build
 fly.toml
 Dockerfile.*
+docker-compose.yaml
+.dockerignore
 
 # misc
 .DS_Store
