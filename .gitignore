@@ -15,6 +15,7 @@ fly.toml
 Dockerfile.*
 docker-compose.yaml
 .dockerignore
+Procfile
 
 # misc
 .DS_Store
