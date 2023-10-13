@@ -1,4 +1,5 @@
-# sponsify
+# Sponsify
+[https://sponsify.onrender.com](https://sponsify.onrender.com)
 Sponsify is a platform that facilitates interactions between sponsors and organizations looking for sponsorships. Organizations, referred to as "projects," offer various sponsorship plans for sponsors to choose from.
 
 ## Technologies Used
@@ -62,7 +63,6 @@ To enable payment processing and subscription management in this app, you will n
 Now, your app is ready to handle payments and subscriptions using Stripe.
 
 ## Usage
-Once the project is set up, you can access it by opening a web browser and navigating to the appropriate URL. Here's how you can use the app:
 - Sponsors can browse and choose sponsorship plans offered by various projects.
 - Organizations (projects) can create and manage sponsorship plans.
 - The app facilitates communication and interactions between sponsors and projects.
