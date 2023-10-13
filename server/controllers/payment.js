@@ -1,7 +1,7 @@
 const pool = require('../models/pool')
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
-const YOUR_DOMAIN = 'http://0.0.0.0:3000';
+const domain = process.env.DOMAIN;
 
 const createCheckoutSession = async (req, res) => {
     const { userId } = req.params;
@@ -51,8 +51,8 @@ const createCheckoutSession = async (req, res) => {
               },
             ],
             mode: 'subscription',
-            success_url: `${YOUR_DOMAIN}/payment-flow?success=true&session_id={CHECKOUT_SESSION_ID}&plan=${plan}&project=${project}`,
-            cancel_url: `${YOUR_DOMAIN}/payment-flow?canceled=true`,
+            success_url: `${domain}/payment-flow?success=true&session_id={CHECKOUT_SESSION_ID}&plan=${plan}&project=${project}`,
+            cancel_url: `${domain}/payment-flow?canceled=true`,
           });
         
           res.redirect(303, session.url);
@@ -74,7 +74,7 @@ const createPortalSession = async (req, res) => {
   
         // This is the url to which the customer will be redirected when they are done
         // managing their billing with the portal.
-        const returnUrl = YOUR_DOMAIN;
+        const returnUrl = domain;
     
         const portalSession = await stripe.billingPortal.sessions.create({
             customer: checkoutSession.customer,
@@ -89,12 +89,12 @@ const createPortalSession = async (req, res) => {
     }
 }
 
-const fetchCheckout = async (baseURL) => {
+const fetchCheckout = async () => {
     // Extract the necessary information from the paymentIntent object
   
     try {
       // Make the API request to trigger the checkout
-      const response = await fetch(`http://${baseURL}/api/checkout`, {
+      const response = await fetch(`${domain}/api/checkout`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
