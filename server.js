@@ -40,6 +40,10 @@ app.use('/api/checkout', checkoutRoute);
 app.use('/api/auth', authRoute);
 app.use('/api/payment', paymentRoute);
 
+// Handle all routes on refreshing page on production
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'views', 'build', 'index.html'));
+});
 
 // Start the server
 app.listen(port, () => {
