@@ -5,7 +5,7 @@ const domain = process.env.DOMAIN;
 
 const createCheckoutSession = async (req, res) => {
     const { userId } = req.params;
-    const stripeLookupKey = req.body.lookup_key
+    const stripeLookupKey = req.body.lookup_key;
 
     try{
         if (!stripeLookupKey) {
@@ -53,6 +53,7 @@ const createCheckoutSession = async (req, res) => {
             mode: 'subscription',
             success_url: `${domain}/payment-flow?success=true&session_id={CHECKOUT_SESSION_ID}&plan=${plan}&project=${project}`,
             cancel_url: `${domain}/payment-flow?canceled=true`,
+            metadata: { userId: userId }, // Include the userId as metadata
           });
         
           res.redirect(303, session.url);
@@ -69,7 +70,6 @@ const createPortalSession = async (req, res) => {
         // For demonstration purposes, we're using the Checkout session to retrieve the customer ID.
         // Typically this is stored alongside the authenticated user in your database.
         const { session_id } = req.body;
-        console.log('Request body from portal session:', req.body);
         const checkoutSession = await stripe.checkout.sessions.retrieve(session_id);
   
         // This is the url to which the customer will be redirected when they are done
@@ -89,17 +89,16 @@ const createPortalSession = async (req, res) => {
     }
 }
 
-const fetchCheckout = async () => {
-    // Extract the necessary information from the paymentIntent object
-  
+const fetchCheckout = async (userId) => {
     try {
       // Make the API request to trigger the checkout
-      const response = await fetch(`${domain}/api/checkout`, {
+      const response = await fetch(`http://localhost:8080/api/checkout/${userId}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
+			userId: userId, // Include the user ID in the request
           // Include any necessary data for the checkout
         }),
       });
@@ -121,6 +120,11 @@ const fetchCheckout = async () => {
   };
 
 const webhook = async (req, res) => {
+	// Retrieve authenticated user ID to pass to fetchCheckout
+	const sessions = await stripe.checkout.sessions.list({
+		limit: 1,
+	});
+	const userId = sessions.data[0].metadata.userId;
 
     let event = req.body;
     const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET;
@@ -177,7 +181,7 @@ const webhook = async (req, res) => {
         // const sponsorId = subscription.metadata.sponsorId;
         // console.log('sponsorId', sponsorId);
         // Trigger the checkout API here
-        await fetchCheckout(req.get('host'))
+        await fetchCheckout(userId)
         break;
     default:
         // Unexpected event type

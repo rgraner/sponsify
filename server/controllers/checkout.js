@@ -3,6 +3,8 @@ const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
   
 
 const checkout = async (req, res) => {
+    const { userId } = req.params;
+    console.log('userId in checkout function:', userId);
     try {
         // Retrieve Stripe customer ID
         const stripeCustomers = await stripe.customers.list({
