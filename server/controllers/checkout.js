@@ -3,38 +3,20 @@ const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
   
 
 const checkout = async (req, res) => {
-    const { userId } = req.params;
+    const { userId, stripeLookupKey, stripeSubscriptionId } = req.params;
     console.log('userId in checkout function:', userId);
+    console.log('stripeLookupKey in checkout function:', stripeLookupKey);
+    console.log('stripeSubscriptionId in checkout function:', stripeSubscriptionId);
     try {
-        // Retrieve Stripe customer ID
-        const stripeCustomers = await stripe.customers.list({
-            limit: 3,
-          });
-        const stripeCustomerId = stripeCustomers.data[0].id;
-        
-        // Retrieve Stripe subscription ID
-        const stripeSubscriptions = await stripe.subscriptions.list({
-            limit: 3,
-            customer: stripeCustomerId
-        });
-        const stripeSubscriptionId = stripeSubscriptions.data[0].id;
-    
-        // Retrieve  Stripe lookup key by subscription item
-        const stripeSubscriptionItems = await stripe.subscriptionItems.list({
-            subscription: stripeSubscriptionId,
-        });
-        const stripeSubscriptionItemId = stripeSubscriptionItems.data[0].id;
-        const subscriptionItem = await stripe.subscriptionItems.retrieve(
-            stripeSubscriptionItemId
-        );
-        const stripeLookupKey = subscriptionItem.price.lookup_key;
-
         // Retrieve sponsor ID
         const sponsorsQuery = await pool.query(
-            'SELECT id FROM sponsors WHERE stripe_customer_id = $1',
-            [stripeCustomerId]
+            'SELECT * FROM sponsors WHERE user_id = $1',
+            [userId]
         )
         const sponsorId = sponsorsQuery.rows[0].id;
+        const stripeCustomerId = sponsorsQuery.rows[0].stripe_customer_id;
+        console.log('sponsorId', sponsorId);
+        console.log('stripeCustomerId', stripeCustomerId);
     
         // Retrieve plan ID and project ID
         const plansQuery = await pool.query(

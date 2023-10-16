@@ -3,7 +3,7 @@ const router = express.Router();
 const dbCheckout = require('../controllers/checkout');
 
 
-router.post('/:userId', dbCheckout.checkout);
+router.post('/:userId/:stripeLookupKey/:stripeSubscriptionId', dbCheckout.checkout);
 
 
 module.exports = router;
