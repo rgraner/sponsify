@@ -52,11 +52,42 @@ const getProjectById = async ( req, res) => {
         console.error(error);
         res.status(500).json({ message: 'Internal server error' });
     }
+};
+
+// Get project by user ID
+const getProjectByUserId = async ( req, res) => {
+  const userId = parseInt(req.params.userId);
+
+  try {
+      const project = await pool.query(
+        'SELECT\
+        projects.id AS project_id,\
+        projects.name,\
+        users.username,\
+        users.email,\
+        projects.description,\
+        projects.logo,\
+        users.created_at,\
+        users.updated_at\
+        FROM users INNER JOIN projects ON users.id = projects.user_id\
+        WHERE users.id = $1',
+        [userId]
+      );
+
+      if(project.rows.length === 0) {
+          return res.status(404).json({ message: 'Project not found' });
+      }
+
+      res.status(200).json(project.rows[0]);
+  } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Internal server error' });
+  }
 
 };
 
 // Get projects by sponsor id
-const getProjectsBysponsorId = async (req, res) => {
+const getProjectsBySponsorId = async (req, res) => {
     const sponsorId = req.params.sponsorId;
   
     try {
@@ -208,7 +239,8 @@ const deleteProject = (req, res) => {
 module.exports = {
     getAllProjects,
     getProjectById,
-    getProjectsBysponsorId,
+    getProjectByUserId,
+    getProjectsBySponsorId,
     createProject,
     updateProject,
     deleteProject,

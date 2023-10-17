@@ -5,6 +5,7 @@ const dbSponsors = require('../controllers/sponsors');
 
 router.get('/', dbSponsors.getAllSponsors);
 router.get('/:sponsorId', dbSponsors.getSponsorById);
+router.get('/user/:userId', dbSponsors.getSponsorByUserId);
 router.get('/project/:projectId', dbSponsors.getSponsorsByProjectId);
 router.post('/', dbSponsors.createSponsor);
 router.put('/:id', dbSponsors.updateSponsor);

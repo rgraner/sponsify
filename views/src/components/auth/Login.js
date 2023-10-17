@@ -17,13 +17,53 @@ const Login = () => {
     setFormData({ ...formData, [name]: value });
   };
 
+  const fetchSponsorData = async (userId) => {
+    try {
+      const sponsorResponse = await fetch(`/api/sponsors/user/${userId}`);
+      if (sponsorResponse.status === 200) {
+        const sponsorData = await sponsorResponse.json();
+        const sponsorId = sponsorData.sponsor_id;
+        console.log('Sponsor ID:', sponsorId);
+        return sponsorId;
+      } else {
+        console.error('Failed to fetch sponsor data');
+        // Handle the error, e.g., display an error message to the user
+        return null;
+      }
+    } catch (sponsorError) {
+      console.error('Error fetching sponsor data:', sponsorError);
+      // Handle the error, e.g., display an error message to the user
+      return null;
+    }
+  };
+  
+  const fetchProjectData = async (userId) => {
+    try {
+      const projectResponse = await fetch(`/api/projects/user/${userId}`);
+      if (projectResponse.status === 200) {
+        const projectData = await projectResponse.json();
+        const projectId = projectData.project_id;
+        console.log('Project ID:', projectId);
+        return projectId;
+      } else {
+        console.error('Failed to fetch project data');
+        // Handle the error, e.g., display an error message to the user
+        return null;
+      }
+    } catch (projectError) {
+      console.error('Error fetching project data:', projectError);
+      // Handle the error, e.g., display an error message to the user
+      return null;
+    }
+  };
+  
   const handleLogin = async () => {
     // Send login data to the backend
     const loginData = {
       email: formData.email,
       password: formData.password,
     };
-
+  
     // Make an API request to the login endpoint
     try {
       const response = await fetch('/api/auth/login', {
@@ -33,22 +73,20 @@ const Login = () => {
         },
         body: JSON.stringify(loginData),
       });
-
-      let responseData;
-
+  
       if (response.status === 200) {
-        responseData = await response.json();
-        // Successful login, you can handle the success here
+        const responseData = await response.json();
         console.log('Login successful');
-
-        // Dispatch login success action to update Redux store
         dispatch(loginSuccess());
-
-        // Store in localStorage
         localStorage.setItem('isLoggedIn', 'true');
         localStorage.setItem('userData', JSON.stringify(responseData.user));
-
-        const userId = responseData.user.id
+        const userId = responseData.user.id;
+  
+        // Fetch sponsor data
+        const sponsorId = await fetchSponsorData(userId);
+        
+        // Fetch project data
+        const projectId = await fetchProjectData(userId);
 
         // Redirect after successful login
         const storedRedirectPath = localStorage.getItem('redirectPath');
@@ -56,21 +94,22 @@ const Login = () => {
           navigate(storedRedirectPath);
           localStorage.removeItem(storedRedirectPath);
         } else if (responseData.user.user_type === 'sponsor') {
-          navigate(`/sponsors/${userId}`);
+          navigate(`/sponsors/${sponsorId}`);
         } else {
-          navigate(`/${userId}`);
+          navigate(`/projects/${projectId}`);
         }
-        
+    
       } else {
-        // Handle login error
         console.error('Login failed');
-        // You can display an error message to the user
+        // Handle login error, e.g., display an error message to the user
       }
     } catch (error) {
-      // Handle network error
       console.error('Network error:', error);
+      // Handle network error, e.g., display an error message to the user
     }
   };
+  
+  
 
   const handleSubmit = (e) => {
     e.preventDefault();

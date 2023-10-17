@@ -28,49 +28,6 @@ const getAllSponsors = (req, res) => {
 const getSponsorById = async ( req, res) => {
   const sponsorId = parseInt(req.params.sponsorId);
 
-  /////
-  // const sponsorsQuery = await pool.query(
-  //   'SELECT stripe_customer_id FROM sponsors WHERE id = $1',
-  //   [sponsorId]
-  // )
-
-  // // Retrieve Stripe subscription ID
-  // const stripeCustomerId = sponsorsQuery.rows[0].stripe_customer_id;
-  // const stripeSubscriptions = await stripe.subscriptions.list({
-  //   limit: 3,
-  //   customer: stripeCustomerId
-  // });
-  // const stripeSubscriptionId = stripeSubscriptions.data[0].id;
-
-  // // Retrieve  Stripe lookup key by subscription item
-  // const stripeSubscriptionItems = await stripe.subscriptionItems.list({
-  //   subscription: stripeSubscriptionId,
-  // });
-  // const stripeSubscriptionItemId = stripeSubscriptionItems.data[0].id;
-  // const subscriptionItem = await stripe.subscriptionItems.retrieve(
-  //   stripeSubscriptionItemId
-  // );
-  // const stripeLookupKey = subscriptionItem.price.lookup_key;
-
-  // // Retrive plan ID and project ID
-  // const plansQuery = await pool.query(
-  //   'SELECT id, project_id FROM plans WHERE stripe_lookup_key = $1',
-  //   [stripeLookupKey]
-  // )
-  // const planId = plansQuery.rows[0].id;
-  // const projecId = plansQuery.rows[0].project_id;
-
-  // await pool.query(
-  //   'INSERT INTO orders (sponsor_id, plan_id, stripe_subscription_id) VALUES($1, $2, $3)',
-  //   [sponsorId, planId, stripeSubscriptionId]
-  // );
-
-  // await pool.query(
-  //   'INSERT INTO sponsor_projects (sponsor_id, project_id) VALUES($1, $2)',
-  //   [sponsorId, projecId]
-  // );
-  /////
-
   try {
       const sponsor = await pool.query(
           'SELECT\
@@ -99,7 +56,39 @@ const getSponsorById = async ( req, res) => {
 
 };
 
-// Get sponsor by project id
+// Get sponsor by user id
+const getSponsorByUserId = async ( req, res) => {
+  const userId = parseInt(req.params.userId);
+
+  try {
+      const sponsor = await pool.query(
+          'SELECT\
+          sponsors.id AS sponsor_id,\
+          sponsors.name,\
+          users.username,\
+          users.email,\
+          sponsors.description,\
+          sponsors.logo,\
+          users.created_at,\
+          users.updated_at\
+          FROM users INNER JOIN sponsors ON users.id = sponsors.user_id\
+          WHERE users.id = $1',
+          [userId]
+      );
+
+      if(sponsor.rows.length === 0) {
+          return res.status(404).json({ message: 'Sponsor not found' });
+      }
+
+      res.status(200).json(sponsor.rows[0]);
+  } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Internal server error' });
+  }
+
+};
+
+// Get sponsors by project id
 const getSponsorsByProjectId = async (req, res) => {
     const projectId = req.params.projectId;
   
@@ -256,6 +245,7 @@ const deleteSponsor = (req, res) => {
 module.exports = {
     getAllSponsors,
     getSponsorById,
+    getSponsorByUserId,
     getSponsorsByProjectId,
     createSponsor,
     updateSponsor,
