@@ -1,5 +1,6 @@
 const pool = require('../models/pool')
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
+const fetch = require('node-fetch');
 
 const domain = process.env.DOMAIN;
 const domain_server = process.env.DOMAIN_SERVER;
