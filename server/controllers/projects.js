@@ -14,7 +14,7 @@ const getAllProjects = (req, res) => {
       projects.logo,\
       users.created_at,\
       users.updated_at\
-      FROM users INNER JOIN projects ON users.id = projects.user_id;',
+      FROM users INNER JOIN projects ON users.id = projects.user_id',
       (error, results) => {
       if (error) {
         throw error;

@@ -17,6 +17,7 @@ const plansRoute = require('./server/routes/plans');
 const checkoutRoute = require('./server/routes/checkout');
 const authRoute = require('./server/routes/auth');
 const paymentRoute = require('./server/routes/payment');
+const ordersRoute = require('./server/routes/orders');
 
 // Middleware
 app.use(express.static(path.join(__dirname, 'views', 'build')));
@@ -39,6 +40,7 @@ app.use('/api/plans', plansRoute);
 app.use('/api/checkout', checkoutRoute);
 app.use('/api/auth', authRoute);
 app.use('/api/payment', paymentRoute);
+app.use('/api/orders', ordersRoute);
 
 // Handle all routes on refreshing page on production
 app.get('*', (req, res) => {

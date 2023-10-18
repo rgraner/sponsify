@@ -91,10 +91,10 @@ const createPortalSession = async (req, res) => {
     }
 }
 
-const fetchCheckout = async (userId, stripeLookupKey, stripeSubscriptionId) => {
+const fetchOrder = async (userId, stripeLookupKey, stripeSubscriptionId) => {
     try {
       // Make the API request to trigger the checkout
-      const response = await fetch(`${domain_server}/api/checkout/${userId}/${stripeLookupKey}/${stripeSubscriptionId}`, {
+      const response = await fetch(`${domain_server}/api/orders/${userId}/${stripeLookupKey}/${stripeSubscriptionId}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -107,16 +107,16 @@ const fetchCheckout = async (userId, stripeLookupKey, stripeSubscriptionId) => {
   
       if (response.ok) {
         // Checkout call successful
-        console.log('Checkout call successful');
+        console.log('Order call successful');
         // Perform additional actions (e.g., display order summary, clear cart, etc.)
       } else {
         // Error handling for the call
-        console.log('Checkout call failed:', response.statusText);
+        console.log('Order call failed:', response.statusText);
         // Handle the error accordingly
       }
     } catch (error) {
       // Error handling for network or other unexpected errors
-      console.log('An error occurred during the checkout call:', error);
+      console.log('An error occurred during the Order call:', error);
       // Handle the error accordingly
     }
   };
@@ -185,7 +185,7 @@ const webhook = async (req, res) => {
         // const sponsorId = subscription.metadata.sponsorId;
         // console.log('sponsorId', sponsorId);
         // Trigger the checkout API here
-        await fetchCheckout(userId, stripeLookupKey, stripeSubscriptionId);
+        await fetchOrder(userId, stripeLookupKey, stripeSubscriptionId);
         break;
     default:
         // Unexpected event type
@@ -199,7 +199,7 @@ const webhook = async (req, res) => {
 module.exports = { 
     createCheckoutSession,
     createPortalSession,
-    fetchCheckout,
+    fetchOrder,
     webhook,
 };
 
