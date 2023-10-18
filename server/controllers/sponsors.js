@@ -102,9 +102,9 @@ const getSponsorsByProjectId = async (req, res) => {
         sponsors.name AS sponsor_name,\
         sponsors.logo AS sponsor_logo\
         FROM projects\
-        INNER JOIN sponsor_projects ON projects.id = sponsor_projects.project_id\
-        INNER JOIN sponsors ON sponsors.id = sponsor_projects.sponsor_id\
-        WHERE projects.id = $1;',
+        INNER JOIN orders ON orders.project_id = projects.id\
+        INNER JOIN sponsors ON sponsors.id = orders.sponsor_id\
+        WHERE projects.id = $1',
         [projectId]
       );
   

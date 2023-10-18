@@ -7,8 +7,7 @@ router.get('/', dbOrders.getAllOrders);
 router.get('/:orderId', dbOrders.getOrderById);
 router.get('/sponsor/:sponsorId', dbOrders.getOrdersBySponsorId);
 router.post('/:userId/:stripeLookupKey/:stripeSubscriptionId', dbOrders.createOrder);
-// router.put('/:id', dbOrders.updateProject);
-// router.delete('/:id', dbOrders.deleteProject);
+router.put('/:orderId', dbOrders.updateOrder);
 
 
 module.exports = router;

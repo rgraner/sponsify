@@ -1,5 +1,5 @@
 const pool = require('../models/pool');
-const bcrypt = require('bcrypt');
+const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
 
 // Get all orders
@@ -122,11 +122,6 @@ const createOrder = async (req, res) => {
             'INSERT INTO orders (sponsor_id, plan_id, stripe_subscription_id, project_id, is_active) VALUES($1, $2, $3, $4, $5)',
             [sponsorId, planId, stripeSubscriptionId, projectId, true]
         );
-    
-            await pool.query(
-            'INSERT INTO sponsor_projects (sponsor_id, project_id) VALUES($1, $2)',
-        [sponsorId, projectId]
-        );
         
         res.status(200).json({ message: 'Checkout successful' });
     } catch (error) {
@@ -136,47 +131,42 @@ const createOrder = async (req, res) => {
 };
 
 
-// Update project
-const updateProject = async (req, res) => {
-    const id = parseInt(req.params.id);
-    const { name, description, username, email, logo } = req.body;
+// Update order will only cancel Stripe subscription
+const updateOrder = async (req, res) => {
+    const orderId = parseInt(req.params.orderId);
+    
+	// Retrieve Stripe subscription ID
+	const ordersQuery = await pool.query(
+		'SELECT stripe_subscription_id FROM orders WHERE id = $1',
+		[orderId]
+	)
+	const stripeSubscriptionId = ordersQuery.rows[0].stripe_subscription_id;
   
     try {
-      const { rows } = await pool.query('SELECT * FROM projects WHERE id = $1', [id]);
+      const { rows } = await pool.query('SELECT * FROM orders WHERE id = $1', [orderId]);
       if (!rows.length) {
-        return res.status(404).json({ message: 'project not found' });
+        return res.status(404).json({ message: 'Order not found' });
       }
   
-      const queryText = 'UPDATE projects SET name = $1, description = $2, username = $3, email = $4, logo = $5, updated_at = $6 WHERE id = $7';
-      const values = [name, description, username, email, logo, new Date(), id];
+      const queryText = 'UPDATE orders SET is_active = $1, updated_at = NOW() WHERE id = $2';
+      const values = [false, orderId];
+
+	  // Cancel subscription on Stripe API
+	  await stripe.subscriptions.cancel(stripeSubscriptionId);
   
       await pool.query(queryText, values);
-      return res.status(200).json({ message: 'project updated successfully' });
+      return res.status(200).json({ message: 'Subscription cancelled successfully' });
     } catch (error) {
       console.error(error);
       return res.status(500).json({ message: 'Server error' });
     }
 };
 
-const deleteProject = (req, res) => {
-    const id = parseInt(req.params.id);
-  
-    pool.query('DELETE FROM projects WHERE id = $1', [id], (error, results) => {
-        if (error) {
-            throw error;
-        }
-        if (results.rowCount === 0) {
-            return res.status(404).json({ error: 'project not found' });
-        }
-        res.status(200).send(`project deleted with ID: ${id}`)
-    })
-};
 
 module.exports = {
 	getAllOrders,
     getOrderById,
     getOrdersBySponsorId,
     createOrder,
-    updateProject,
-    deleteProject,
+    updateOrder,
 };
