@@ -51,7 +51,9 @@ function ProjectPage({ project, fetchProject, sponsorsByProject, fetchSponsorsBy
         </div>
         {sponsorsByProject.length > 0 ? (
         <div className="items no-list">
-          {sponsorsByProject[0].sponsors.map((sponsor) => (
+          {sponsorsByProject[0].sponsors
+          .filter((sponsor) => sponsor.is_subscription_active === true)
+          .map((sponsor) => (
             <li key={sponsor.sponsor_id}>
               <div className="companies-logo">
                   <Link to={`/sponsors/${sponsor.sponsor_id}`}>

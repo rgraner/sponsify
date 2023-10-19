@@ -105,7 +105,7 @@ const getSponsorsByProjectId = async (req, res) => {
         FROM projects\
         INNER JOIN orders ON orders.project_id = projects.id\
         INNER JOIN sponsors ON sponsors.id = orders.sponsor_id\
-        WHERE projects.id = $1 AND orders.is_subscription_active = true',
+        WHERE projects.id = $1',
         [projectId]
       );
   
