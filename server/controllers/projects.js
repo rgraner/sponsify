@@ -98,11 +98,12 @@ const getProjectsBySponsorId = async (req, res) => {
         sponsors.name AS sponsor_name,\
         projects.id AS project_id,\
         projects.name AS project,\
-        projects.logo AS project_logo\
+        projects.logo AS project_logo,\
+        orders.is_subscription_active\
         FROM sponsors\
         INNER JOIN orders ON orders.sponsor_id = sponsors.id\
         INNER JOIN projects ON orders.project_id = projects.id\
-        WHERE sponsors.id = $1;',
+        WHERE sponsors.id = $1 AND orders.is_subscription_active = true',
         [sponsorId]
       );
   
@@ -126,6 +127,7 @@ const getProjectsBySponsorId = async (req, res) => {
             project_id: row.project_id,
             project_name: row.project,
             project_logo: row.project_logo,
+            is_subscription_active: row.is_subscription_active,
         });
       });
   

@@ -8,14 +8,16 @@ const getAllOrders = async (req, res) => {
 		'SELECT\
 		orders.id AS order_id,\
 		sponsors.name AS sponsor,\
+        projects.name AS project,\
 		plans.name AS plan,\
 		plans.price AS price,\
 		orders.stripe_subscription_id,\
-		orders.is_active,\
+		orders.is_subscription_active,\
 		orders.created_at,\
 		orders.updated_at\
 		FROM orders\
 		INNER JOIN sponsors ON sponsors.id = orders.sponsor_id\
+        INNER JOIN projects ON projects.id = orders.project_id\
 		INNER JOIN plans ON plans.id = orders.plan_id',
 		(error, results) => {
 			if (error) {
@@ -35,14 +37,16 @@ const getOrderById = async ( req, res) => {
 			'SELECT\
 			orders.id AS order_id,\
 			sponsors.name AS sponsor,\
+            projects.name AS project,\
 			plans.name AS plan,\
 			plans.price AS price,\
 			orders.stripe_subscription_id,\
-			orders.is_active,\
+			orders.is_subscription_active,\
 			orders.created_at,\
 			orders.updated_at\
 			FROM orders\
 			INNER JOIN sponsors ON sponsors.id = orders.sponsor_id\
+            INNER JOIN projects ON projects.id = orders.project_id\
 			INNER JOIN plans ON plans.id = orders.plan_id\
 			WHERE orders.id = $1',
 			[orderId]
@@ -59,7 +63,7 @@ const getOrderById = async ( req, res) => {
     }
 };
 
-// Get order by sponsor ID
+// Get orders by sponsor ID
 const getOrdersBySponsorId = async ( req, res) => {
   const sponsorId = parseInt(req.params.sponsorId);
 
@@ -68,14 +72,16 @@ const getOrdersBySponsorId = async ( req, res) => {
 		'SELECT\
 		orders.id AS order_id,\
 		sponsors.name AS sponsor,\
+        projects.name AS project,\
 		plans.name AS plan,\
 		plans.price AS price,\
 		orders.stripe_subscription_id,\
-		orders.is_active,\
+		orders.is_subscription_active,\
 		orders.created_at,\
 		orders.updated_at\
 		FROM orders\
 		INNER JOIN sponsors ON sponsors.id = orders.sponsor_id\
+        INNER JOIN projects ON projects.id = orders.project_id\
 		INNER JOIN plans ON plans.id = orders.plan_id\
 		WHERE orders.sponsor_id = $1',
         [sponsorId]
@@ -85,12 +91,47 @@ const getOrdersBySponsorId = async ( req, res) => {
           return res.status(404).json({ message: 'Order not found' });
       }
 
-      res.status(200).json(order.rows[0]);
+      res.status(200).json(order.rows);
   } catch (error) {
       console.error(error);
       res.status(500).json({ message: 'Internal server error' });
   }
 
+};
+
+// Get orders by project ID
+const getOrdersByProjectId = async ( req, res) => {
+    const projectId = parseInt(req.params.projectId);
+  
+    try {
+        const order = await pool.query(
+          'SELECT\
+          orders.id AS order_id,\
+          sponsors.name AS sponsor,\
+          projects.name AS project,\
+          plans.name AS plan,\
+          plans.price AS price,\
+          orders.stripe_subscription_id,\
+          orders.is_subscription_active,\
+          orders.created_at,\
+          orders.updated_at\
+          FROM orders\
+          INNER JOIN sponsors ON sponsors.id = orders.sponsor_id\
+          INNER JOIN projects ON projects.id = orders.project_id\
+          INNER JOIN plans ON plans.id = orders.plan_id\
+          WHERE orders.project_id = $1',
+          [projectId]
+        );
+  
+        if(order.rows.length === 0) {
+            return res.status(404).json({ message: 'Order not found' });
+        }
+  
+        res.status(200).json(order.rows);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
 };
 
 
@@ -119,7 +160,7 @@ const createOrder = async (req, res) => {
         const projectId = plansQuery.rows[0].project_id;
         
         await pool.query(
-            'INSERT INTO orders (sponsor_id, plan_id, stripe_subscription_id, project_id, is_active) VALUES($1, $2, $3, $4, $5)',
+            'INSERT INTO orders (sponsor_id, plan_id, stripe_subscription_id, project_id, is_subscription_active) VALUES($1, $2, $3, $4, $5)',
             [sponsorId, planId, stripeSubscriptionId, projectId, true]
         );
         
@@ -148,7 +189,7 @@ const updateOrder = async (req, res) => {
         return res.status(404).json({ message: 'Order not found' });
       }
   
-      const queryText = 'UPDATE orders SET is_active = $1, updated_at = NOW() WHERE id = $2';
+      const queryText = 'UPDATE orders SET is_subscription_active = $1, updated_at = NOW() WHERE id = $2';
       const values = [false, orderId];
 
 	  // Cancel subscription on Stripe API
@@ -167,6 +208,7 @@ module.exports = {
 	getAllOrders,
     getOrderById,
     getOrdersBySponsorId,
+    getOrdersByProjectId,
     createOrder,
     updateOrder,
 };
