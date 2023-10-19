@@ -38,7 +38,7 @@ function Plans({ plansByProject, fetchPlansByProject, projectId }) {
     return (
         <div className="card">
             {plansByProject
-                .filter((plan) => !plan.is_archived) // Filter out archived plans
+                .filter((plan) => !plan.is_plan_archived) // Filter out archived plans
                 .map((plan) => {
                     let content;
 
@@ -66,12 +66,12 @@ function Plans({ plansByProject, fetchPlansByProject, projectId }) {
                     return (
                         <div className="plan-card" key={plan.plan_id}>  
                             <div className="plan-card-header">
-                                <h3>{plan.name}</h3>
-                                <p>{plan.price === 0.00 ? 'Free' : `€${plan.price}/Month`}</p>
+                                <h3>{plan.plan_name}</h3>
+                                <p>{plan.plan_price === 0.00 ? 'Free' : `€${plan.plan_price}/Month`}</p>
                             </div>
                             <div className="plan-card-body">
                                 <ul>
-                                {plan.benefits.map((benefit) => (
+                                {plan.plan_benefits.map((benefit) => (
                                     <li key={benefit.benefit_id}>{benefit.description}</li>
                                 ))}
                                 </ul>
