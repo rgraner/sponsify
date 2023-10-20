@@ -144,7 +144,7 @@ const getPlansBySponsorId = async (req, res) => {
             plans.updated_at\
             FROM plans\
             LEFT JOIN plan_benefits ON plans.id = plan_benefits.plan_id\
-            INNER JOIN orders ON orders.project_id = plans.project_id\
+            INNER JOIN orders ON orders.plan_id = plans.id\
             WHERE orders.sponsor_id = $1',
             [sponsorId]
         );
