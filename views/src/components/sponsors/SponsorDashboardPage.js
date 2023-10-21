@@ -1,51 +1,40 @@
 import React, { useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { fetchSponsor } from '../../redux/reducers/sponsorReducer';
-import { fetchPlansBySponsor } from '../../redux/reducers/plansBySponsorReducer';
+import { fetchSponsorByUser } from '../../redux/reducers/sponsorByUserReducer';
+import { fetchPlansBySponsorUserId } from '../../redux/reducers/plansBySponsorUserIdReducer';
 
 
-function SponsorPage({ sponsor, fetchSponsor, plansBySponsor, fetchPlansBySponsor }) {
-
-    const { sponsorId } = useParams();
+function SponsorDashboardPage({ sponsorByUser, fetchSponsorByUser, plansBySponsorUserId, fetchPlansBySponsorUserId }) {
+    const { userId } = useParams();
 
     useEffect(() => {
-        fetchPlansBySponsor(sponsorId);
-        fetchSponsor(sponsorId);
-    }, [fetchSponsor, fetchPlansBySponsor, sponsorId])
+        fetchSponsorByUser(userId);
+        fetchPlansBySponsorUserId(userId);
+    }, [fetchSponsorByUser, fetchPlansBySponsorUserId, userId])
 
     // Check if projectsBySponsor is empty before accessing its properties
-    if (plansBySponsor.length === 0 || plansBySponsor.length === undefined ) {
-        return <div className="container">{sponsor.name} doesn't sponsor any project yet...</div>; // You can display a loading indicator here
+    if (!plansBySponsorUserId || plansBySponsorUserId.length === 0) {
+        return <div className="container">{sponsorByUser.name} doesn't sponsor any project yet...</div>; // You can display a loading indicator here
     }
     
     return (
         <div className="container">
-            <div className="page-title companies-logo">
-                {sponsor.logo ? (
-                    <img
-                        src={`/images/companies-logo/${sponsor.logo}`}
-                        alt={sponsor.name}
-                        onError={(e) => {
-                            e.target.src = '/images/companies-logo/missing-image.svg';
-                        }}
-                    />
-                ) : (
-                    <img
-                        src="/images/companies-logo/missing-image.svg"
-                        alt="Missing Logo"
-                    />
-                )}
-                <h1>{sponsor.name}</h1>
+            <div className="">
+                <h1>{sponsorByUser.name}</h1>
             </div>
             <div className="section-title">
                 <h2>Projects we sponsor</h2>
             </div>
-                <ul className="items no-list">
-                    {plansBySponsor.map((plan) => (
+                <ul className="">
+                    {plansBySponsorUserId.map((plan) => (
                         <li key={plan.plan_id}>
-                            <div className="companies-logo">
+                            <div className="">
                             {plan.plan_name}
+                            <span>
+                                {plan.is_plan_subscription_active ? 'Active' : 'Inactive'}
+                            </span>
+                            <button>Cancel Plan</button>
                                 
                             </div>
                         </li>
@@ -59,14 +48,14 @@ function SponsorPage({ sponsor, fetchSponsor, plansBySponsor, fetchPlansBySponso
 }
 
 const mapStateToProps = (state) => ({
-    sponsor: state.sponsor,
-    plansBySponsor: state.plansBySponsor
+    sponsorByUser: state.sponsorByUser,
+    plansBySponsorUserId: state.plansBySponsorUserId
   });
   
   const mapDispatchToProps = {
-    fetchSponsor,
-    fetchPlansBySponsor
+    fetchSponsorByUser,
+    fetchPlansBySponsorUserId
   };
   
-  export default connect(mapStateToProps, mapDispatchToProps)(SponsorPage);
+  export default connect(mapStateToProps, mapDispatchToProps)(SponsorDashboardPage);
   

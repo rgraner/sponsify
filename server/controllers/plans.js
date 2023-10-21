@@ -196,6 +196,84 @@ const getPlansBySponsorId = async (req, res) => {
     }
 };
 
+// Get plans by sponsor user ID
+const getPlansBySponsorUserId = async (req, res) => {
+    const userId = req.user.id; //authenticated user
+
+    try {
+        const plansData = await pool.query(
+            'SELECT\
+            users.id AS user_id,\
+            orders.id AS order_id,\
+            orders.sponsor_id,\
+            plans.project_id,\
+            plans.id AS plan_id,\
+            plans.price AS plan_price,\
+            plans.name AS plan_name,\
+            plan_benefits.id AS benefit_id,\
+            plan_benefits.benefit,\
+            plans.stripe_lookup_key,\
+            plans.is_archived AS is_plan_archived,\
+            orders.is_subscription_active AS is_plan_subscription_active,\
+            plans.created_at,\
+            plans.updated_at\
+            FROM plans\
+            LEFT JOIN plan_benefits ON plans.id = plan_benefits.plan_id\
+            INNER JOIN orders ON orders.plan_id = plans.id\
+            INNER JOIN sponsors ON orders.sponsor_id = sponsors.id\
+            INNER JOIN users ON users.id = sponsors.user_id\
+            WHERE users.id = $1',
+            [userId]
+        );
+
+        if (plansData.rows.length === 0) {
+            return res.status(404).json({ message: 'No plans found for this sponsor' });
+        }
+
+        // Group the results by plan ID and collect unique benefits 
+        const result = {};
+
+        plansData.rows.forEach((row) => {
+            const planId = row.plan_id;
+
+            if (!result[planId]) {
+                result[planId] = {
+                    user_id: row.user_id,
+                    order_id: row.order_id,
+                    sponsor_id: row.sponsor_id,
+                    project_id: row.project_id,
+                    plan_id: planId,
+                    plan_price: parseFloat(row.plan_price),
+                    plan_name: row.plan_name,
+                    plan_benefits: [],
+                    stripe_lookup_key: row.stripe_lookup_key,
+                    is_plan_archived: row.is_plan_archived,
+                    is_plan_subscription_active: row.is_plan_subscription_active,
+                    created_at: row.created_at,
+                    updated_at: row.updated_at,
+                };
+            }
+
+            if (
+                !result[planId].plan_benefits.some(
+                    (benefit) => benefit.benefit_id === row.benefit_id
+                )
+            ) {
+                result[planId].plan_benefits.push({
+                    benefit_id: row.benefit_id,
+                    description: row.benefit,
+                });
+            }
+        });
+
+        const uniquePlans = Object.values(result);
+
+        res.status(200).json(uniquePlans);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+};
 
 const createPlan = async (req, res) => {
     const { project_id, name, price, benefits } = req.body;
@@ -363,6 +441,7 @@ module.exports = {
     getAllPlans,
     getPlansByProjectId,
     getPlansBySponsorId,
+    getPlansBySponsorUserId,
     createPlan,
     updatePlan,
     archivePlan,

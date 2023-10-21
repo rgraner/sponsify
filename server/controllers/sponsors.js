@@ -58,7 +58,8 @@ const getSponsorById = async ( req, res) => {
 
 // Get sponsor by user id
 const getSponsorByUserId = async ( req, res) => {
-  const userId = parseInt(req.params.userId);
+  // const userId = parseInt(req.params.userId);
+  const userId = req.user.id; //authenticated user
 
   try {
       const sponsor = await pool.query(
