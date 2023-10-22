@@ -36,7 +36,7 @@ function App() {
 						<Route path="/projects/:projectId" element={<ProjectPage />} />
 						<Route exact path="/sponsors" element={<Sponsors />} />
 						<Route path="/sponsors/:sponsorId" element={<SponsorPage />} />
-						<Route path="/sponsor-dashboard/:userId" element={<SponsorDashboardPage />} />
+						<Route path="/sponsor-dashboard/" element={<SponsorDashboardPage />} />
 						<Route path="/pre-registration" element={<PreRegistration />} />
 						<Route path="/sponsor-registration" element={<SponsorRegistration />} />
 						<Route path="/project-registration" element={<ProjectRegistration />} />

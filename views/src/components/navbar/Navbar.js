@@ -24,6 +24,7 @@ function Navbar() {
           {isLoggedIn ? (
             <div className="user-info">
               <span>Hello, {user.username}</span>
+              <Link to="/sponsor-dashboard">Dashboard</Link>
               <Link to="/logout">Logout</Link>
             </div>
           ) : (

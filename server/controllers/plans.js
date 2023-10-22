@@ -206,7 +206,7 @@ const getPlansBySponsorUserId = async (req, res) => {
             users.id AS user_id,\
             orders.id AS order_id,\
             orders.sponsor_id,\
-            plans.project_id,\
+            projects.name AS project_name,\
             plans.id AS plan_id,\
             plans.price AS plan_price,\
             plans.name AS plan_name,\
@@ -221,6 +221,7 @@ const getPlansBySponsorUserId = async (req, res) => {
             LEFT JOIN plan_benefits ON plans.id = plan_benefits.plan_id\
             INNER JOIN orders ON orders.plan_id = plans.id\
             INNER JOIN sponsors ON orders.sponsor_id = sponsors.id\
+            INNER JOIN projects ON projects.id = plans.project_id\
             INNER JOIN users ON users.id = sponsors.user_id\
             WHERE users.id = $1',
             [userId]
@@ -241,7 +242,7 @@ const getPlansBySponsorUserId = async (req, res) => {
                     user_id: row.user_id,
                     order_id: row.order_id,
                     sponsor_id: row.sponsor_id,
-                    project_id: row.project_id,
+                    project_name: row.project_name,
                     plan_id: planId,
                     plan_price: parseFloat(row.plan_price),
                     plan_name: row.plan_name,

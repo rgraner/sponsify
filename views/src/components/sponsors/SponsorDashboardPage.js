@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { fetchSponsorByUser } from '../../redux/reducers/sponsorByUserReducer';
@@ -7,11 +7,72 @@ import { fetchPlansBySponsorUserId } from '../../redux/reducers/plansBySponsorUs
 
 function SponsorDashboardPage({ sponsorByUser, fetchSponsorByUser, plansBySponsorUserId, fetchPlansBySponsorUserId }) {
     const { userId } = useParams();
+    const [planToCancel, setPlanToCancel] = useState(null);
 
     useEffect(() => {
         fetchSponsorByUser(userId);
         fetchPlansBySponsorUserId(userId);
     }, [fetchSponsorByUser, fetchPlansBySponsorUserId, userId])
+
+    // Function to handle canceling a plan
+    const handleCancelPlan = (planId) => {
+        // Find the plan with the matching planId
+        const selectedPlan = plansBySponsorUserId.find((plan) => plan.plan_id === planId);
+        console.log('selectedPlan', selectedPlan);
+    
+        if (selectedPlan) {
+            // Display a confirmation dialog/modal here and set the plan to cancel
+            setPlanToCancel(selectedPlan);
+        }
+    };
+    
+
+    // Function to confirm the cancellation
+    const confirmCancelPlan = async (orderId) => {
+        try {
+            // Make an API request to cancel the selected plan
+            if (planToCancel) {
+                console.log('Canceling plan', planToCancel);
+    
+                // Send a POST request to your server
+                const response = await fetch(`/api/orders/${orderId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    // body: JSON.stringify({ planId: planToCancel.id }),
+                });
+    
+                if (response.status === 200) {
+                    // Plan cancellation was successful
+                    console.log('Plan cancelled successfully');
+
+                    // Update the local sate to reflect the plan's new status
+                    const updatePlans = plansBySponsorUserId.map((plan) => {
+                        if (plan.plan_id === planToCancel.plan_id) {
+                            return {
+                                ...plan,
+                                is_plan_subscription_active: false,
+                            };
+                        }
+                        return plan;
+                    })
+
+                    // Update the state with the modified plans array
+                    fetchPlansBySponsorUserId(updatePlans);
+    
+                    // Clear the selected plan
+                    setPlanToCancel(null);
+                } else {
+                    // Handle errors, show an error message to the user, etc.
+                    console.error('Plan cancellation failed');
+                }
+            }
+        } catch (error) {
+            console.error('Error canceling plan:', error);
+        }
+    };
+    
 
     // Check if projectsBySponsor is empty before accessing its properties
     if (!plansBySponsorUserId || plansBySponsorUserId.length === 0) {
@@ -30,16 +91,27 @@ function SponsorDashboardPage({ sponsorByUser, fetchSponsorByUser, plansBySponso
                     {plansBySponsorUserId.map((plan) => (
                         <li key={plan.plan_id}>
                             <div className="">
-                            {plan.plan_name}
-                            <span>
-                                {plan.is_plan_subscription_active ? 'Active' : 'Inactive'}
-                            </span>
-                            <button>Cancel Plan</button>
-                                
+                                {plan.project_name} - {plan.plan_name}
+                                <span> - {plan.is_plan_subscription_active ? (
+                                        <>
+                                        active - <button onClick={() => handleCancelPlan(plan.plan_id)}>Cancel Sponsorship</button> 
+                                        </>          
+                                    ) : (
+                                        'cancelled'
+                                    )}        
+                                </span>                               
                             </div>
                         </li>
                     ))}
                 </ul>
+                {/* Add a confirmation modal or dialog here */}
+                {planToCancel && (
+                    <div className="confirmation-modal">
+                        <p>Are you sure you want to cancel the {planToCancel.plan_name} sponsorship of the {planToCancel.project_name}?</p>
+                        <button onClick={() => confirmCancelPlan(planToCancel.order_id)}>Yes, Cancel</button>
+                        <button onClick={() => setPlanToCancel(null)}>No, Don't Cancel</button>
+                    </div>
+                )}
             <div>
             </div>
         </div>
