@@ -1,24 +1,21 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { fetchSponsorByUser } from '../../redux/reducers/sponsorByUserReducer';
 import { fetchPlansBySponsorUserId } from '../../redux/reducers/plansBySponsorUserIdReducer';
 
 
 function SponsorDashboardPage({ sponsorByUser, fetchSponsorByUser, plansBySponsorUserId, fetchPlansBySponsorUserId }) {
-    const { userId } = useParams();
     const [planToCancel, setPlanToCancel] = useState(null);
 
-    useEffect(() => {
+    useEffect((userId) => {
         fetchSponsorByUser(userId);
         fetchPlansBySponsorUserId(userId);
-    }, [fetchSponsorByUser, fetchPlansBySponsorUserId, userId])
+    }, [fetchSponsorByUser, fetchPlansBySponsorUserId])
 
     // Function to handle canceling a plan
     const handleCancelPlan = (planId) => {
         // Find the plan with the matching planId
         const selectedPlan = plansBySponsorUserId.find((plan) => plan.plan_id === planId);
-        console.log('selectedPlan', selectedPlan);
     
         if (selectedPlan) {
             // Display a confirmation dialog/modal here and set the plan to cancel
@@ -40,7 +37,6 @@ function SponsorDashboardPage({ sponsorByUser, fetchSponsorByUser, plansBySponso
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    // body: JSON.stringify({ planId: planToCancel.id }),
                 });
     
                 if (response.status === 200) {
@@ -81,7 +77,7 @@ function SponsorDashboardPage({ sponsorByUser, fetchSponsorByUser, plansBySponso
     
     return (
         <div className="container">
-            <div className="">
+            <div className="page-title">
                 <h1>{sponsorByUser.name}</h1>
             </div>
             <div className="section-title">
