@@ -10,7 +10,7 @@
 /coverage
 
 # production
-/build
+views/build/
 fly.toml
 Dockerfile.*
 docker-compose.yaml
