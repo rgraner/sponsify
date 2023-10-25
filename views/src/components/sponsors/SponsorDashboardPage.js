@@ -83,6 +83,7 @@ function SponsorDashboardPage({ sponsorByUser, fetchSponsorByUser, plansBySponso
             <div className="section-title">
                 <h2>Projects we sponsor</h2>
             </div>
+            {plansBySponsorUserId.length > 0 ? (
                 <ul className="">
                     {plansBySponsorUserId.map((plan) => (
                         <li key={plan.plan_id}>
@@ -100,6 +101,9 @@ function SponsorDashboardPage({ sponsorByUser, fetchSponsorByUser, plansBySponso
                         </li>
                     ))}
                 </ul>
+                ) : (
+                    <p>You don't sponsor any project yet...</p>
+                  )}
                 {/* Add a confirmation modal or dialog here */}
                 {planToCancel && (
                     <div className="confirmation-modal">
