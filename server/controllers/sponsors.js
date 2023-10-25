@@ -6,7 +6,9 @@ const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 // Get all sponsors
 const getAllSponsors = (req, res) => {
     pool.query(
-      'SELECT\
+      'SELECT DISTINCT ON(sponsor_id)\
+      orders.id AS order_id,\
+      orders.is_subscription_active,\
       sponsors.id,\
       sponsors.name,\
       users.username,\
@@ -15,7 +17,9 @@ const getAllSponsors = (req, res) => {
       sponsors.logo,\
       users.created_at,\
       users.updated_at\
-      FROM users INNER JOIN sponsors ON users.id = sponsors.user_id;',
+      FROM users\
+      INNER JOIN sponsors ON users.id = sponsors.user_id\
+      INNER JOIN orders ON orders.sponsor_id = sponsors.id',
       (error, results) => {
       if (error) {
         throw error;

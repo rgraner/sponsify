@@ -12,7 +12,9 @@ function Sponsors({ sponsors, fetchSponsors }) {
         <div className="container">
             <h1 className="page-title">Sponsors</h1>
             <ul className="items no-list">
-                {sponsors.map((sponsor) => (
+                {sponsors
+                .filter((sponsor) => sponsor.is_subscription_active === true)
+                .map((sponsor) => (
                     <li key={sponsor.id}>
                         <div className="companies-logo">
                             <Link to={`/sponsors/${sponsor.id}`}>
