@@ -282,27 +282,7 @@ const createPlan = async (req, res) => {
     const stripeLookupKey = `project-${project_id}-${name.toLowerCase().replace(/ /g, '-')}-${randomNumber(5)}`;
 
 
-    const projectName = await pool.query(
-        'SELECT DISTINCT projects.name FROM projects JOIN plans ON projects.id = plans.project_id WHERE projects.id = $1;', [project_id]  
-    )
-    if (projectName.rows.length === 0) {
-        return res.status(404).json({ message: 'Product not found' });
-    };
-
-    const stripeProductName = `${capitalizeFirstLetter(projectName.rows[0].name)} ${capitalizeFirstLetter(name)}`;
-
-    const stripeProduct = await stripe.products.create({
-        name: stripeProductName,
-    });
-
-    await stripe.prices.create({
-        unit_amount: price * 100,
-        currency: 'eur',
-        recurring: {interval: 'month'},
-        product: stripeProduct.id,
-        lookup_key: stripeLookupKey
-    });
-
+    
     try {
         // Perform data validation here if needed
 
@@ -325,6 +305,28 @@ const createPlan = async (req, res) => {
                 await pool.query(benefitInsertQuery);
             }
         }
+
+        const projectName = await pool.query(
+            'SELECT DISTINCT projects.name FROM projects JOIN plans ON projects.id = plans.project_id WHERE projects.id = $1;', [project_id]  
+        )
+        if (projectName.rows.length === 0) {
+            return res.status(404).json({ message: 'Project not found' });
+        };
+    
+        const stripeProductName = `${capitalizeFirstLetter(projectName.rows[0].name)} ${capitalizeFirstLetter(name)}`;
+    
+        const stripeProduct = await stripe.products.create({
+            name: stripeProductName,
+        });
+    
+        await stripe.prices.create({
+            unit_amount: price * 100,
+            currency: 'eur',
+            recurring: {interval: 'month'},
+            product: stripeProduct.id,
+            lookup_key: stripeLookupKey
+        });
+    
 
         res.status(201).json({ message: 'Plan created successfully' });
     } catch (error) {
