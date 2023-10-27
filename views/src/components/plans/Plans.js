@@ -86,25 +86,40 @@ function Plans({
                         let content;
 
                         if (userData) {
-                            const isPlanForProject = plansBySponsor.some(plan => plan.project_id === parseInt(projectId));
-                            if (userData.user_type === 'sponsor' && plansBySponsor.length > 0 && isPlanForProject) {
-                                // content = <p>You can only subscribe to one plan per project</p>;
-                                content = <div className="button-style" onClick={handleButtonClick2}>Sponsor Now</div>
-                            } else if (userData.user_type === 'sponsor') {
-                                const actionURL = `/api/payment/${userData.id}/create-checkout-session`;
-                                content = (
-                                    <form action={actionURL} method="POST">
-                                        {/* Add a hidden field with the lookup_key of your Price */}
-                                        <input type="hidden" name="lookup_key" value={plan.stripe_lookup_key} />
-                                        <button id="checkout-and-portal-button" type="submit">
-                                            Sponsor now
-                                        </button>
-                                    </form>
-                                );
+                            if (Array.isArray(plansBySponsor) && plansBySponsor.length > 0) {
+                                const isPlanForProject = plansBySponsor.some(plan => plan.project_id === parseInt(projectId));
+                                if (userData.user_type === 'sponsor' && plansBySponsor.length > 0 && isPlanForProject) {
+                                    // content = <p>You can only subscribe to one plan per project</p>;
+                                    content = <div className="button-style" onClick={handleButtonClick2}>Sponsor Now</div>
+                                } else if (userData.user_type === 'sponsor') {
+                                    const actionURL = `/api/payment/${userData.id}/create-checkout-session`;
+                                    content = (
+                                        <form action={actionURL} method="POST">
+                                            {/* Add a hidden field with the lookup_key of your Price */}
+                                            <input type="hidden" name="lookup_key" value={plan.stripe_lookup_key} />
+                                            <button id="checkout-and-portal-button" type="submit">
+                                                Sponsor now
+                                            </button>
+                                        </form>
+                                    );
+                                } else {
+                                    // content = <p>Please login as a sponsor to subscribe</p>;
+                                    content = <div className="button-style" onClick={handleButtonClick}>Sponsor Now</div>
+                                }
+
                             } else {
-                                // content = <p>Please login as a sponsor to subscribe</p>;
-                                content = <div className="button-style" onClick={handleButtonClick}>Sponsor Now</div>
+                                const actionURL = `/api/payment/${userData.id}/create-checkout-session`;
+                                    content = (
+                                        <form action={actionURL} method="POST">
+                                            {/* Add a hidden field with the lookup_key of your Price */}
+                                            <input type="hidden" name="lookup_key" value={plan.stripe_lookup_key} />
+                                            <button id="checkout-and-portal-button" type="submit">
+                                                Sponsor now
+                                            </button>
+                                        </form>
+                                    );
                             }
+                            
                         } else {
                             // redirect to login page
                             content = <div className="button-style" onClick={handleButtoClick3}>Sponsor Now</div>
