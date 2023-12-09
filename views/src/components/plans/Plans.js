@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { fetchPlansByProject } from '../../redux/reducers/plansByProjectReducer';
 import { fetchSponsorByUser } from '../../redux/reducers/sponsorByUserReducer';
 import { fetchPlansBySponsor } from '../../redux/reducers/plansBySponsorReducer';
+import { fetchProject } from '../../redux/reducers/projectReducer'
 import './Plans.css'
 
 
@@ -14,13 +15,15 @@ function Plans({
     fetchSponsorByUser, 
     plansBySponsor, 
     fetchPlansBySponsor, 
+    fetchProject,
     projectId 
 }) {
-    const userData = JSON.parse(localStorage.getItem('userData'));
-    const userId = userData.id;
 
-     // Add a state variable to store the sponsor ID
-     const [sponsorId, setSponsorId] = useState(null);
+    const userData = JSON.parse(localStorage.getItem('userData'));
+    const [userId, setUserId] = useState(null);
+
+    // Add a state variable to store the sponsor ID
+    const [sponsorId, setSponsorId] = useState(null);
 
     const navigate = useNavigate();
     const location = useLocation();
@@ -28,8 +31,9 @@ function Plans({
     useEffect(() => {
         if (projectId) {
             fetchPlansByProject(projectId);
+            fetchProject(projectId);
         }
-    }, [fetchPlansByProject, projectId]);
+    }, [fetchPlansByProject, fetchProject, projectId]);
 
     useEffect(() => {
         // Fetch sponsor information when the component mounts
@@ -153,13 +157,15 @@ function Plans({
 const mapStateToProps = (state) => ({
     plansByProject: state.plansByProject,
     sponsorByUser: state.sponsorByUser,
-    plansBySponsor: state.plansBySponsor
+    plansBySponsor: state.plansBySponsor,
+    project: state.project,
 });
 
 const mapDispatchToProps = {
     fetchPlansByProject,
     fetchSponsorByUser,
-    fetchPlansBySponsor
+    fetchPlansBySponsor,
+    fetchProject,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Plans); // Connect Plans component to Redux
